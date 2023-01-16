@@ -16,8 +16,17 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <div>
-          <button onClick={getData}>Get Data</button>
+        <div className="flex flex-col-reverse h-screen">
+          <nav className="overflow-auto bg-green-400">
+            <ul className="flex">
+              <li className="px-4 py-2 hover:bg-white/30">Wishlist</li>
+              <li className="px-4 py-2 hover:bg-white/30">Applied</li>
+              <li className="px-4 py-2 hover:bg-white/30">Rejected</li>
+              <li className="px-4 py-2 hover:bg-white/30">Interview</li>
+              <li className="px-4 py-2 hover:bg-white/30">Pending</li>
+              <li className="px-4 py-2 hover:bg-white/30">Offer</li>
+            </ul>
+          </nav>
         </div>
       </main>
     </>
