@@ -1,4 +1,5 @@
 import JobCard from '@/components/jobCard';
+import NewEntry from '@/components/newEntry';
 import Head from 'next/head';
 
 export default function Home() {
@@ -36,6 +37,7 @@ export default function Home() {
             />
           </div>
         </div>
+        <NewEntry />
       </main>
     </>
   );
