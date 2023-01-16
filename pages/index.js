@@ -1,3 +1,4 @@
+import JobCard from '@/components/jobCard';
 import Head from 'next/head';
 
 export default function Home() {
@@ -27,6 +28,13 @@ export default function Home() {
               <li className="px-4 py-2 hover:bg-white/30">Offer</li>
             </ul>
           </nav>
+          <div className="flex flex-col h-full bg-purple-300 p-4 gap-y-4 overflow-x-auto max-w-screen">
+            <JobCard
+              companyName={'Company Name'}
+              position={'Position'}
+              dateAdded={'3 days ago'}
+            />
+          </div>
         </div>
       </main>
     </>
