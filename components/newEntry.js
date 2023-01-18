@@ -1,7 +1,14 @@
 export default function NewEntry() {
-  function save(event) {
+  async function save(event) {
     event.preventDefault();
-    // const formData = new FormData(event.target);
+    const formData = new FormData(event.target);
+    const link = `/api/addNewEntry`;
+    const response = await fetch(link, {
+      method: 'POST',
+      body: formData,
+    });
+    const json = await response.json();
+    console.log(json);
   }
 
   return (
