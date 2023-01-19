@@ -22,11 +22,10 @@ export default async function handler(req, res) {
   });
   const form = new formidable.IncomingForm();
   form.parse(req, async (err, fields) => {
-    console.log(fields);
-    const newEntry = await pool.query(
-      `INSERT INTO "job_listing" VALUES (3, '${fields.company}', '${fields.position}', '${fields.link}', '${fields.location}', '${fields.salary}', '${fields.notes}')`,
-    );
     const { rows } = await pool.query('SELECT COUNT(*) FROM "job_listing"');
+    await pool.query(
+      `INSERT INTO "job_listing" VALUES ('${fields.status}' ,'${fields.company}', '${fields.position}', '${fields.link}', '${fields.location}', '${fields.salary}', '${fields.notes}')`,
+    );
     res.send(rows[0]);
   });
 }

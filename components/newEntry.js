@@ -21,7 +21,7 @@ export default function NewEntry() {
           <button className="py-2 px-4 bg-lime-500">Save</button>
           <button className="py-2 px-4 bg-red-500">Cancel</button>
         </div>
-        <select>
+        <select name="status">
           <option>Wishlist</option>
           <option>Applied</option>
           <option>Rejected</option>
