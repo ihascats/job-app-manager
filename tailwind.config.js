@@ -8,6 +8,7 @@ module.exports = {
     extend: {
       width: {
         'screen-p4': 'calc(100vw - 32px)',
+        'screen-resume-select': 'calc(100% - 36px);',
       },
     },
   },
