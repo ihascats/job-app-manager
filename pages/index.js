@@ -48,9 +48,9 @@ export default function Home() {
               ? jobs.map(({ id, company, position, createdAt }) => (
                   <JobCard
                     key={id}
-                    companyName={company}
+                    company={company}
                     position={position}
-                    dateAdded={createdAt}
+                    createdAt={createdAt}
                   />
                 ))
               : null}
