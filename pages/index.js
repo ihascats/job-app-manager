@@ -1,6 +1,8 @@
 import JobCard from '@/components/jobCard';
 import NewEntry from '@/components/newEntry';
+import ToggleNewButtons from '@/components/toggleNewButtons';
 import Head from 'next/head';
+import { useState } from 'react';
 
 export default function Home() {
   async function getData() {
@@ -8,6 +10,9 @@ export default function Home() {
     const json = await sqlData.json();
     console.table(json);
   }
+
+  const [createNewEntry, setCreateNewEntry] = useState(false);
+  const [buttonsVisible, setButtonsVisible] = useState(true);
 
   return (
     <>
@@ -21,6 +26,7 @@ export default function Home() {
         <div className="flex flex-col-reverse h-screen">
           <nav className="overflow-x-auto bg-green-400 h-[43px]">
             <ul className="flex h-fit">
+              <li className="px-4 py-2 hover:bg-white/30">Resumes</li>
               <li className="px-4 py-2 hover:bg-white/30">Wishlist</li>
               <li className="px-4 py-2 hover:bg-white/30">Applied</li>
               <li className="px-4 py-2 hover:bg-white/30">Rejected</li>
@@ -37,7 +43,18 @@ export default function Home() {
             />
           </div>
         </div>
-        <NewEntry />
+        {createNewEntry ? (
+          <NewEntry
+            setCreateNewEntry={setCreateNewEntry}
+            setButtonsVisible={setButtonsVisible}
+          />
+        ) : null}
+        {buttonsVisible ? (
+          <ToggleNewButtons
+            setCreateNewEntry={setCreateNewEntry}
+            setButtonsVisible={setButtonsVisible}
+          />
+        ) : null}
       </main>
     </>
   );

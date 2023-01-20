@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-export default function NewEntry() {
+export default function NewEntry({ setCreateNewEntry, setButtonsVisible }) {
   async function save(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
@@ -32,6 +32,12 @@ export default function NewEntry() {
     });
   }, []);
 
+  function cancel(event) {
+    event.preventDefault();
+    setButtonsVisible(true);
+    setCreateNewEntry(false);
+  }
+
   return (
     <div className="bg-black/30 py-6 px-4 h-screen absolute top-0 w-full">
       <form
@@ -40,7 +46,9 @@ export default function NewEntry() {
       >
         <div className="flex justify-end">
           <button className="py-2 px-4 bg-lime-500">Save</button>
-          <button className="py-2 px-4 bg-red-500">Cancel</button>
+          <button onClick={cancel} className="py-2 px-4 bg-red-500">
+            Cancel
+          </button>
         </div>
         <select name="status" className="p-2 bg-gray-200">
           <option>Wishlist</option>
