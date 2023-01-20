@@ -2,17 +2,25 @@ import JobCard from '@/components/jobCard';
 import NewEntry from '@/components/newEntry';
 import ToggleNewButtons from '@/components/toggleNewButtons';
 import Head from 'next/head';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Home() {
   async function getData() {
-    const sqlData = await fetch(`/api/hello`);
-    const json = await sqlData.json();
-    console.table(json);
+    const link = `/api/getEntries`;
+    const response = await fetch(link);
+    const json = await response.json();
+    return json;
   }
+
+  useEffect(() => {
+    getData().then((result) => {
+      setJobs(result.rows);
+    });
+  }, []);
 
   const [createNewEntry, setCreateNewEntry] = useState(false);
   const [buttonsVisible, setButtonsVisible] = useState(true);
+  const [jobs, setJobs] = useState([]);
 
   return (
     <>
@@ -36,11 +44,16 @@ export default function Home() {
             </ul>
           </nav>
           <div className="flex flex-col h-full bg-purple-300 p-4 gap-y-4 overflow-x-auto max-w-screen">
-            <JobCard
-              companyName={'Company Name'}
-              position={'Position'}
-              dateAdded={'3 days ago'}
-            />
+            {jobs.length > 0
+              ? jobs.map(({ id, company, position, createdAt }) => (
+                  <JobCard
+                    key={id}
+                    companyName={company}
+                    position={position}
+                    dateAdded={createdAt}
+                  />
+                ))
+              : null}
           </div>
         </div>
         {createNewEntry ? (
