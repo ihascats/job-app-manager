@@ -25,7 +25,7 @@ export default async function handler(req, res) {
   });
 
   const form = new formidable.IncomingForm();
-  form.keepExtensions = true;
+  form.options.keepExtensions = true;
   const dir = `./uploads/${process.env.USERNAME}`;
 
   form.on('file', function (field, file) {
