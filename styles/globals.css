@@ -2,6 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Apply the animation to the SVG element */
+.loading {
+  animation: spin 2s backwards infinite;
+}
+
 .hide-scroll::-webkit-scrollbar {
   display: none;
 }
