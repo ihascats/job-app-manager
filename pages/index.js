@@ -45,14 +45,16 @@ export default function Home() {
           </nav>
           <div className="flex flex-col h-full bg-purple-300 p-4 gap-y-4 overflow-x-auto max-w-screen">
             {jobs.length > 0
-              ? jobs.map(({ id, company, position, createdAt }) => (
-                  <JobCard
-                    key={id}
-                    company={company}
-                    position={position}
-                    createdAt={createdAt}
-                  />
-                ))
+              ? jobs
+                  .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+                  .map(({ id, company, position, createdAt }) => (
+                    <JobCard
+                      key={id}
+                      company={company}
+                      position={position}
+                      createdAt={createdAt}
+                    />
+                  ))
               : null}
           </div>
         </div>
