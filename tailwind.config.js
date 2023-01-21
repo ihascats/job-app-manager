@@ -6,6 +6,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      height: {
+        'screen-p4': 'calc(100vh - 48px)',
+      },
       width: {
         'screen-p4': 'calc(100vw - 32px)',
         'screen-resume-select': 'calc(100% - 36px);',
