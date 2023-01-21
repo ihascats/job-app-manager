@@ -12,6 +12,12 @@ export default function Home() {
     return json;
   }
 
+  function updateJobs() {
+    getData().then((result) => {
+      setJobs(result.rows);
+    });
+  }
+
   useEffect(() => {
     getData().then((result) => {
       setJobs(result.rows);
@@ -20,6 +26,7 @@ export default function Home() {
 
   const [createNewEntry, setCreateNewEntry] = useState(false);
   const [buttonsVisible, setButtonsVisible] = useState(true);
+  const [cardVisible, setCardVisible] = useState();
   const [jobs, setJobs] = useState([]);
 
   return (
@@ -46,13 +53,17 @@ export default function Home() {
           <div className="flex flex-col h-full bg-purple-300 p-4 gap-y-4 overflow-x-auto max-w-screen">
             {jobs.length > 0
               ? jobs
-                  .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+                  .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
                   .map(({ id, company, position, createdAt }) => (
                     <JobCard
                       key={id}
                       company={company}
                       position={position}
                       createdAt={createdAt}
+                      id={id}
+                      setCreateNewEntry={setCreateNewEntry}
+                      setButtonsVisible={setButtonsVisible}
+                      setCardVisible={setCardVisible}
                     />
                   ))
               : null}
@@ -62,6 +73,9 @@ export default function Home() {
           <NewEntry
             setCreateNewEntry={setCreateNewEntry}
             setButtonsVisible={setButtonsVisible}
+            cardVisible={cardVisible}
+            setCardVisible={setCardVisible}
+            updateJobs={updateJobs}
           />
         ) : null}
         {buttonsVisible ? (
