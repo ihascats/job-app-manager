@@ -45,24 +45,22 @@ export default async function handler(req, res) {
     resume,
     cover,
   }) {
+    const createdAt = `${new Date()
+      .toISOString()
+      .slice(0, 19)
+      .replace('T', ' ')}`;
     connection.query(
-      `INSERT INTO job_listing (createdAt, status, company, position, link, location, salary, notes, resume, cover) VALUES ('${new Date()
-        .toISOString()
-        .slice(0, 19)
-        .replace(
-          'T',
-          ' ',
-        )}', '${status}' ,'${company}', '${position}', '${link}', '${location}', '${salary}', '${notes}', '${resume}', '${cover}')`,
+      `INSERT INTO job_listing (createdAt, status, company, position, link, location, salary, notes, resume, cover) VALUES ('${createdAt}', '${status}' ,'${company}', '${position}', '${link}', '${location}', '${salary}', '${notes}', '${resume}', '${cover}')`,
       (err, rows) => {
         console.log(rows);
-        res.send({ insertedId: rows.insertId });
+        res.send({ insertedId: rows.insertId, createdAt });
         connection.end();
       },
     );
   }
 
   form.parse(req, async (err, fields, files) => {
-    const { resume, cover_letter: cover } = files;
+    const { resume, cover } = files;
     cover ? (fields.cover = cover.originalFilename) : (fields.cover = '');
     resume ? (fields.resume = resume.originalFilename) : null;
 

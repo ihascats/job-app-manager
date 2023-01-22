@@ -23,25 +23,13 @@ export default function NewEntry({
     return json.resumes;
   }
 
-  async function getEntry(id) {
-    const link = `/api/getEntry/${id}`;
-    const response = await fetch(link, {
-      method: 'GET',
-    });
-    const json = await response.json();
-    console.log(json);
-    return json;
-  }
-
   useEffect(() => {
     getResumes().then((result) => {
       setResumeList(result);
     });
 
     if (cardVisible) {
-      getEntry(cardVisible).then((result) => {
-        setJobData(result.rows[0]);
-      });
+      setJobData(cardVisible);
     }
   }, [cardVisible]);
 
@@ -52,7 +40,6 @@ export default function NewEntry({
     if (cardVisible) {
       setCardVisible();
     }
-    updateJobs();
     setButtonsVisible(true);
     setCreateNewEntry(false);
   }
@@ -60,25 +47,38 @@ export default function NewEntry({
   async function save(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
+    const obj = { createdAt: '' };
+
+    formData.forEach((value, key) => {
+      if (typeof value === 'object') {
+        if ('name' in value) obj[key] = value.name;
+      } else {
+        obj[key] = value;
+      }
+    });
+
     const link = `/api/addNewEntry`;
     await fetch(link, {
       method: 'POST',
       body: formData,
     }).then((result) => {
       result.json().then((value) => {
-        console.log(value);
+        obj.id = value.insertedId;
+        obj.createdAt = value.createdAt;
+        updateJobs(obj.id, obj);
       });
     });
     cancel();
   }
 
-  async function deleteEntry(event, id) {
+  async function deleteEntry(event, { id }) {
     event.preventDefault();
+    updateJobs(id);
+    cancel();
     const link = `/api/getEntry/${id}`;
     await fetch(link, {
       method: 'DELETE',
     });
-    cancel();
   }
 
   const icons = Icons();
@@ -174,7 +174,7 @@ export default function NewEntry({
                 );
               }}
               hidden
-              name="cover_letter"
+              name="cover"
               type="file"
             ></input>
           </label>

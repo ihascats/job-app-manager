@@ -12,11 +12,16 @@ export default function Home() {
     return json;
   }
 
-  function updateJobs() {
-    getData().then((result) => {
-      setJobs(result.rows);
-      console.log(result.rows);
-    });
+  function updateJobs(id, jobData) {
+    const arrayOfJobs = structuredClone(jobs);
+
+    if (jobData) {
+      arrayOfJobs.push(jobData);
+      setJobs(arrayOfJobs);
+    } else {
+      const newJobList = arrayOfJobs.filter((job) => job.id !== id);
+      setJobs(newJobList);
+    }
   }
 
   useEffect(() => {
@@ -55,13 +60,13 @@ export default function Home() {
             {jobs.length > 0
               ? jobs
                   .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-                  .map(({ id, company, position, createdAt }) => (
+                  .map((job) => (
                     <JobCard
-                      key={id}
-                      company={company}
-                      position={position}
-                      createdAt={createdAt}
-                      id={id}
+                      key={job.id}
+                      company={job.company}
+                      position={job.position}
+                      createdAt={job.createdAt}
+                      job={job}
                       setCreateNewEntry={setCreateNewEntry}
                       setButtonsVisible={setButtonsVisible}
                       setCardVisible={setCardVisible}

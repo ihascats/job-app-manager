@@ -4,7 +4,7 @@ export default function JobCard({
   company,
   position,
   createdAt,
-  id,
+  job,
   setCreateNewEntry,
   setButtonsVisible,
   setCardVisible,
@@ -14,7 +14,7 @@ export default function JobCard({
       onClick={() => {
         setCreateNewEntry(true);
         setButtonsVisible(false);
-        setCardVisible(id);
+        setCardVisible(job);
       }}
       className="rounded-xl p-2 bg-white h-fit w-screen-p4"
     >
