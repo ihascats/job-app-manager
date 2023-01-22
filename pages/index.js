@@ -35,6 +35,17 @@ export default function Home() {
     }
   }
 
+  function filterJobs(event) {
+    const filter = event.target.textContent;
+    const arrayOfJobs = structuredClone(jobs);
+    const filteredList = arrayOfJobs.filter((job) => {
+      if (job.status === filter) {
+        return job;
+      }
+    });
+    setFilteredJobs(filteredList);
+  }
+
   useEffect(() => {
     getData().then((result) => {
       setJobs(result.rows);
@@ -45,6 +56,7 @@ export default function Home() {
   const [buttonsVisible, setButtonsVisible] = useState(true);
   const [cardVisible, setCardVisible] = useState();
   const [jobs, setJobs] = useState([]);
+  const [filteredJobs, setFilteredJobs] = useState([]);
 
   return (
     <>
@@ -59,17 +71,45 @@ export default function Home() {
           <nav className="overflow-x-auto bg-green-400 h-[43px]">
             <ul className="flex h-fit">
               <li className="px-4 py-2 hover:bg-white/30">Resumes</li>
-              <li className="px-4 py-2 hover:bg-white/30">Wishlist</li>
-              <li className="px-4 py-2 hover:bg-white/30">Applied</li>
-              <li className="px-4 py-2 hover:bg-white/30">Rejected</li>
-              <li className="px-4 py-2 hover:bg-white/30">Interview</li>
-              <li className="px-4 py-2 hover:bg-white/30">Pending</li>
-              <li className="px-4 py-2 hover:bg-white/30">Offer</li>
+              <li onClick={filterJobs} className="px-4 py-2 hover:bg-white/30">
+                Wishlist
+              </li>
+              <li onClick={filterJobs} className="px-4 py-2 hover:bg-white/30">
+                Applied
+              </li>
+              <li onClick={filterJobs} className="px-4 py-2 hover:bg-white/30">
+                Rejected
+              </li>
+              <li onClick={filterJobs} className="px-4 py-2 hover:bg-white/30">
+                Interview
+              </li>
+              <li onClick={filterJobs} className="px-4 py-2 hover:bg-white/30">
+                Pending
+              </li>
+              <li onClick={filterJobs} className="px-4 py-2 hover:bg-white/30">
+                Offer
+              </li>
             </ul>
           </nav>
           <div className="flex flex-col h-full bg-purple-300 p-4 gap-y-4 overflow-x-auto max-w-screen">
-            {jobs.length > 0
+            {jobs.length > 0 && filteredJobs.length === 0
               ? jobs
+                  .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                  .map((job) => (
+                    <JobCard
+                      key={job.id || job.createdAt}
+                      company={job.company}
+                      position={job.position}
+                      createdAt={job.createdAt}
+                      job={job}
+                      setCreateNewEntry={setCreateNewEntry}
+                      setButtonsVisible={setButtonsVisible}
+                      setCardVisible={setCardVisible}
+                    />
+                  ))
+              : null}
+            {filteredJobs.length > 0
+              ? filteredJobs
                   .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
                   .map((job) => (
                     <JobCard
