@@ -1,27 +1,27 @@
-const { Pool } = require('pg');
+const mysql = require('mysql2');
 
 export default async function handler(req, res) {
   const { id } = req.query;
-  const pool = new Pool({
-    user: 'ihascats',
-    host: 'db.bit.io',
-    database: 'ihascats/job-app', // public database
-    password: process.env.BITIO_API, // key from bit.io database page connect menu
-    port: 5432,
-    ssl: true,
-  });
+  const connection = mysql.createConnection(process.env.DATABASE_URL);
 
   if (req.method === 'GET') {
-    const { rows } = await pool.query(
+    connection.query(
       `SELECT * FROM job_listing WHERE id = ${id}`,
+      (err, rows) => {
+        // ... use the result ...
+        res.send({ rows });
+      },
     );
-    res.send({ rows });
   }
 
   if (req.method === 'DELETE') {
-    const { rows } = await pool.query(
+    connection.query(
       `DELETE FROM job_listing WHERE id = ${id}`,
+      (err, rows) => {
+        // ... use the result ...
+        res.send({ rows });
+      },
     );
-    res.send({ rows });
   }
+  connection.end();
 }

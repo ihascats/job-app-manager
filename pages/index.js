@@ -15,6 +15,7 @@ export default function Home() {
   function updateJobs() {
     getData().then((result) => {
       setJobs(result.rows);
+      console.log(result.rows);
     });
   }
 

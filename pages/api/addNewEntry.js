@@ -1,4 +1,4 @@
-const { Pool } = require('pg');
+const mysql = require('mysql2');
 const fs = require('fs');
 
 import formidable from 'formidable';
@@ -15,14 +15,7 @@ export default async function handler(req, res) {
     return;
   }
 
-  const pool = new Pool({
-    user: 'ihascats',
-    host: 'db.bit.io',
-    database: 'ihascats/job-app', // public database
-    password: process.env.BITIO_API, // key from bit.io database page connect menu
-    port: 5432,
-    ssl: true,
-  });
+  const connection = mysql.createConnection(process.env.DATABASE_URL);
 
   const form = new formidable.IncomingForm();
   form.options.keepExtensions = true;
@@ -52,14 +45,19 @@ export default async function handler(req, res) {
     resume,
     cover,
   }) {
-    await pool.query(
-      `INSERT INTO "job_listing" ("createdAt", "status", "company", "position", "link", "location", "salary", "notes", "resume", "cover") VALUES ('${new Date()
+    connection.query(
+      `INSERT INTO job_listing (createdAt, status, company, position, link, location, salary, notes, resume, cover) VALUES ('${new Date()
         .toISOString()
         .slice(0, 19)
         .replace(
           'T',
           ' ',
         )}', '${status}' ,'${company}', '${position}', '${link}', '${location}', '${salary}', '${notes}', '${resume}', '${cover}')`,
+      (err, rows) => {
+        console.log(rows);
+        res.send({ insertedId: rows.insertId });
+        connection.end();
+      },
     );
   }
 
@@ -69,6 +67,5 @@ export default async function handler(req, res) {
     resume ? (fields.resume = resume.originalFilename) : null;
 
     insertData(fields);
-    res.send({ status: 'finished', fields, files });
   });
 }

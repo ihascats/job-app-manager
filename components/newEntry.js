@@ -29,6 +29,7 @@ export default function NewEntry({
       method: 'GET',
     });
     const json = await response.json();
+    console.log(json);
     return json;
   }
 
@@ -64,7 +65,9 @@ export default function NewEntry({
       method: 'POST',
       body: formData,
     }).then((result) => {
-      console.log(result);
+      result.json().then((value) => {
+        console.log(value);
+      });
     });
     cancel();
   }
