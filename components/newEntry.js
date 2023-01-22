@@ -44,14 +44,10 @@ export default function NewEntry({
     setCreateNewEntry(false);
   }
 
-  async function save(event) {
+  async function updateEntry(event, { id }) {
     event.preventDefault();
-    const formData = new FormData(event.target);
-    const obj = {
-      createdAt: `${new Date().toISOString().slice(0, 19).replace('T', ' ')}`,
-    };
-    updateJobs(obj.id, obj);
-    cancel();
+    const formData = new FormData(event.target.parentElement.parentElement);
+    const obj = { createdAt: '' };
 
     formData.forEach((value, key) => {
       if (typeof value === 'object') {
@@ -60,6 +56,34 @@ export default function NewEntry({
         obj[key] = value;
       }
     });
+
+    updateJobs(id, obj, true);
+    cancel();
+
+    const link = `/api/getEntry/${id}`;
+    await fetch(link, {
+      method: 'PUT',
+      body: formData,
+    });
+  }
+
+  async function save(event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const obj = {
+      createdAt: `${new Date().toISOString().slice(0, 19).replace('T', ' ')}`,
+    };
+
+    formData.forEach((value, key) => {
+      if (typeof value === 'object') {
+        if ('name' in value) obj[key] = value.name;
+      } else {
+        obj[key] = value;
+      }
+    });
+
+    updateJobs(obj.id, obj);
+    cancel();
 
     const link = `/api/addNewEntry`;
     await fetch(link, {
@@ -108,8 +132,18 @@ export default function NewEntry({
                 Delete
               </button>
             ) : null}
-
-            <button className="py-2 px-4 bg-lime-500">Save</button>
+            {cardVisible ? (
+              <button
+                onClick={(event) => {
+                  updateEntry(event, cardVisible);
+                }}
+                className="py-2 px-4 bg-lime-500"
+              >
+                Update
+              </button>
+            ) : (
+              <button className="py-2 px-4 bg-lime-500">Save</button>
+            )}
             <button onClick={cancel} className="py-2 px-4 bg-yellow-500">
               Cancel
             </button>

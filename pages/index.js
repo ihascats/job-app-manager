@@ -12,15 +12,26 @@ export default function Home() {
     return json;
   }
 
-  function updateJobs(id, jobData) {
+  async function updateJobs(id, jobData, update) {
     const arrayOfJobs = structuredClone(jobs);
-
-    if (jobData) {
-      arrayOfJobs.push(jobData);
-      setJobs(arrayOfJobs);
-    } else {
-      const newJobList = arrayOfJobs.filter((job) => job.id !== id);
+    if (update) {
+      const newJobList = arrayOfJobs.map((job) => {
+        if (job.id === id) {
+          jobData.createdAt = job.createdAt;
+          jobData.id = id;
+          return jobData;
+        }
+        return job;
+      });
       setJobs(newJobList);
+    } else {
+      if (jobData) {
+        arrayOfJobs.push(jobData);
+        setJobs(arrayOfJobs);
+      } else {
+        const newJobList = arrayOfJobs.filter((job) => job.id !== id);
+        setJobs(newJobList);
+      }
     }
   }
 
@@ -62,7 +73,7 @@ export default function Home() {
                   .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
                   .map((job) => (
                     <JobCard
-                      key={job.id}
+                      key={job.id || job.createdAt}
                       company={job.company}
                       position={job.position}
                       createdAt={job.createdAt}
