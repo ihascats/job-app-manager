@@ -47,7 +47,11 @@ export default function NewEntry({
   async function save(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
-    const obj = { createdAt: '' };
+    const obj = {
+      createdAt: `${new Date().toISOString().slice(0, 19).replace('T', ' ')}`,
+    };
+    updateJobs(obj.id, obj);
+    cancel();
 
     formData.forEach((value, key) => {
       if (typeof value === 'object') {
@@ -65,10 +69,8 @@ export default function NewEntry({
       result.json().then((value) => {
         obj.id = value.insertedId;
         obj.createdAt = value.createdAt;
-        updateJobs(obj.id, obj);
       });
     });
-    cancel();
   }
 
   async function deleteEntry(event, { id }) {
