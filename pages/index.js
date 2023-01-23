@@ -13,32 +13,33 @@ export default function Home() {
     return json;
   }
 
-  async function updateJobs(id, jobData, update) {
+  async function updateJobs(id, jobData) {
     const arrayOfJobs = structuredClone(jobs);
-    if (update) {
-      const newJobList = arrayOfJobs.map((job) => {
-        if (job.id === id) {
-          jobData.createdAt = job.createdAt;
-          jobData.id = id;
-          return jobData;
-        }
-        return job;
-      });
-      setJobs(newJobList);
+    if (jobData) {
+      arrayOfJobs.push(jobData);
+      setJobs(arrayOfJobs);
     } else {
-      if (jobData) {
-        arrayOfJobs.push(jobData);
-        setJobs(arrayOfJobs);
-      } else {
-        const newJobList = arrayOfJobs.filter((job) => job.id !== id);
-        setJobs(newJobList);
-      }
+      const newJobList = arrayOfJobs.filter((job) => job.id !== id);
+      setJobs(newJobList);
     }
+  }
+
+  function updateEntryInfo(id, jobData) {
+    const arrayOfJobs = structuredClone(jobs);
+    const newJobList = arrayOfJobs.map((job) => {
+      if (job.id === id) {
+        jobData.createdAt = job.createdAt;
+        jobData.id = id;
+        return jobData;
+      }
+      return job;
+    });
+    setJobs(newJobList);
   }
 
   function filterJobs(event) {
     const filter = event.target.dataset.filter;
-    setFilteredJobs(sortedJobs[filter.toLowerCase()]);
+    setFilter(filter);
   }
 
   useEffect(() => {
@@ -80,7 +81,7 @@ export default function Home() {
   const [createNewEntry, setCreateNewEntry] = useState(false);
   const [buttonsVisible, setButtonsVisible] = useState(true);
   const [cardVisible, setCardVisible] = useState();
-  const [filteredJobs, setFilteredJobs] = useState([]);
+  const [filter, setFilter] = useState();
   const [sortedJobs, setSortedJobs] = useState();
 
   return (
@@ -109,7 +110,7 @@ export default function Home() {
             </ul>
           </nav>
           <div className="flex flex-col h-full bg-purple-300 p-4 gap-y-4 overflow-x-auto max-w-screen">
-            {jobs.length > 0 && filteredJobs.length === 0
+            {jobs.length > 0 && !filter
               ? jobs
                   .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
                   .map((job) => (
@@ -125,8 +126,8 @@ export default function Home() {
                     />
                   ))
               : null}
-            {filteredJobs.length > 0
-              ? filteredJobs
+            {filter
+              ? sortedJobs[filter.toLowerCase()]
                   .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
                   .map((job) => (
                     <JobCard
@@ -150,6 +151,7 @@ export default function Home() {
             cardVisible={cardVisible}
             setCardVisible={setCardVisible}
             updateJobs={updateJobs}
+            updateEntryInfo={updateEntryInfo}
           />
         ) : null}
         {buttonsVisible ? (

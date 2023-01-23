@@ -7,6 +7,7 @@ export default function NewEntry({
   cardVisible,
   setCardVisible,
   updateJobs,
+  updateEntryInfo,
 }) {
   const [coverLetterFileName, setCoverLetterFileName] = useState();
   const [resumeFileName, setResumeFileName] = useState();
@@ -56,8 +57,7 @@ export default function NewEntry({
         obj[key] = value;
       }
     });
-
-    updateJobs(id, obj, true);
+    updateEntryInfo(id, obj);
     cancel();
 
     const link = `/api/getEntry/${id}`;
