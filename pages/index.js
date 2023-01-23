@@ -1,4 +1,5 @@
 import JobCard from '@/components/jobCard';
+import NavItems from '@/components/navItems';
 import NewEntry from '@/components/newEntry';
 import ToggleNewButtons from '@/components/toggleNewButtons';
 import Head from 'next/head';
@@ -36,14 +37,8 @@ export default function Home() {
   }
 
   function filterJobs(event) {
-    const filter = event.target.textContent;
-    const arrayOfJobs = structuredClone(jobs);
-    const filteredList = arrayOfJobs.filter((job) => {
-      if (job.status === filter) {
-        return job;
-      }
-    });
-    setFilteredJobs(filteredList);
+    const filter = event.target.dataset.filter;
+    setFilteredJobs(sortedJobs[filter.toLowerCase()]);
   }
 
   useEffect(() => {
@@ -52,11 +47,41 @@ export default function Home() {
     });
   }, []);
 
+  const [jobs, setJobs] = useState([]);
+  const statusList = [
+    'Wishlist',
+    'Applied',
+    'Rejected',
+    'Interview',
+    'Pending',
+    'Offer',
+  ];
+
+  useEffect(() => {
+    function sortJobs(statusList) {
+      const arrayOfJobs = structuredClone(jobs);
+      const obj = {};
+      statusList.forEach((filter) => {
+        const filteredList = arrayOfJobs.filter((job) => {
+          if (job.status === filter) {
+            return job;
+          }
+        });
+        obj[filter.toLowerCase()] = filteredList;
+      });
+      return obj;
+    }
+    if (jobs.length > 0) {
+      const amounts = sortJobs(statusList);
+      setSortedJobs(amounts);
+    }
+  }, [jobs]);
+
   const [createNewEntry, setCreateNewEntry] = useState(false);
   const [buttonsVisible, setButtonsVisible] = useState(true);
   const [cardVisible, setCardVisible] = useState();
-  const [jobs, setJobs] = useState([]);
   const [filteredJobs, setFilteredJobs] = useState([]);
+  const [sortedJobs, setSortedJobs] = useState();
 
   return (
     <>
@@ -71,24 +96,16 @@ export default function Home() {
           <nav className="overflow-x-auto bg-green-400 h-[43px]">
             <ul className="flex h-fit">
               <li className="px-4 py-2 hover:bg-white/30">Resumes</li>
-              <li onClick={filterJobs} className="px-4 py-2 hover:bg-white/30">
-                Wishlist
-              </li>
-              <li onClick={filterJobs} className="px-4 py-2 hover:bg-white/30">
-                Applied
-              </li>
-              <li onClick={filterJobs} className="px-4 py-2 hover:bg-white/30">
-                Rejected
-              </li>
-              <li onClick={filterJobs} className="px-4 py-2 hover:bg-white/30">
-                Interview
-              </li>
-              <li onClick={filterJobs} className="px-4 py-2 hover:bg-white/30">
-                Pending
-              </li>
-              <li onClick={filterJobs} className="px-4 py-2 hover:bg-white/30">
-                Offer
-              </li>
+              {statusList.map((status) => {
+                return (
+                  <NavItems
+                    key={status}
+                    status={status}
+                    sortedJobs={sortedJobs}
+                    filterJobs={filterJobs}
+                  />
+                );
+              })}
             </ul>
           </nav>
           <div className="flex flex-col h-full bg-purple-300 p-4 gap-y-4 overflow-x-auto max-w-screen">
