@@ -15,10 +15,13 @@ export default function Home() {
 
   async function updateJobs(id, jobData) {
     const arrayOfJobs = structuredClone(jobs);
+    // When saving jobs
     if (jobData) {
       arrayOfJobs.push(jobData);
       setJobs(arrayOfJobs);
-    } else {
+    }
+    // When deleting jobs (no jobData included)
+    else {
       const newJobList = arrayOfJobs.filter((job) => job.id !== id);
       setJobs(newJobList);
     }

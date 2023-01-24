@@ -14,6 +14,7 @@ export default function NewEntry({
   const [resumeList, setResumeList] = useState([]);
   const [resumeSelectSwitch, setResumeSelectSwitch] = useState(true);
   const [jobData, setJobData] = useState();
+  const [saving, setSaving] = useState(false);
 
   async function getResumes() {
     const link = `/api/getResumes`;
@@ -69,6 +70,7 @@ export default function NewEntry({
 
   async function save(event) {
     event.preventDefault();
+    setSaving(true);
     const formData = new FormData(event.target);
     const obj = {
       createdAt: `${new Date().toISOString().slice(0, 19).replace('T', ' ')}`,
@@ -82,9 +84,6 @@ export default function NewEntry({
       }
     });
 
-    updateJobs(obj.id, obj);
-    cancel();
-
     const link = `/api/addNewEntry`;
     await fetch(link, {
       method: 'POST',
@@ -93,6 +92,9 @@ export default function NewEntry({
       result.json().then((value) => {
         obj.id = value.insertedId;
         obj.createdAt = value.createdAt;
+        updateJobs(obj.id, obj);
+        setSaving(false);
+        cancel();
       });
     });
   }
@@ -111,7 +113,12 @@ export default function NewEntry({
 
   return (
     <div className="bg-black/30 py-6 px-4 h-screen absolute top-0 w-full">
-      {cardVisible && !jobData ? (
+      {saving ? (
+        <div className="rounded-xl bg-white w-screen-p4 h-screen-p4 backdrop-blur-md flex flex-col text-neutral-800 justify-center items-center fixed">
+          {icons.loading}
+          <p className="font-mono">Saving job data..</p>
+        </div>
+      ) : cardVisible && !jobData ? (
         <div className="rounded-xl bg-white w-screen-p4 h-screen-p4 backdrop-blur-md flex flex-col text-neutral-800 justify-center items-center fixed">
           {icons.loading}
           <p className="font-mono">Loading job data..</p>
