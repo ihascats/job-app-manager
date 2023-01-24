@@ -1,17 +1,21 @@
 export default function Timestamp({ createdAt }) {
-  const timeDifference =
-    Math.abs(new Date(createdAt).getTime() - new Date().getTime()) / 36e5;
+  const currentDate = new Date();
+  const pastDate = new Date(createdAt);
+  const difference = Math.abs(currentDate - pastDate) / 36e5;
+
+  const seconds = Math.floor(difference * 3600) - 3600;
+  const minutes = Math.floor(difference * 60) - 60;
+  const hours = Math.floor(difference) - 1;
+  const days = Math.floor(difference / 24);
 
   const timeAmount =
-    timeDifference > 24
-      ? new Date(createdAt).toString().split(' ')[1].trim() +
-        ' ' +
-        new Date(createdAt).toString().split(' ')[2].trim()
-      : timeDifference > 1
-      ? Math.floor(timeDifference) + 'h'
-      : timeDifference * 60 > 1
-      ? Math.floor(timeDifference * 60) + 'm'
-      : Math.floor(timeDifference * 3600) + 's';
+    seconds < 60
+      ? `${seconds}s`
+      : minutes < 60
+      ? `${minutes}m`
+      : hours < 24
+      ? `${hours}h`
+      : `${days}d`;
 
   return (
     <h3 className="text-sm font-bold opacity-60 font-mono whitespace-nowrap">
