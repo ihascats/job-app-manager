@@ -22,7 +22,10 @@ export default async function handler(req, res) {
   form.on('file', function (field, file) {
     form.uploadDir = dir + '/' + field;
     const newFilePath = form.uploadDir + '/' + file.originalFilename;
-
+    if (fs.existsSync(newFilePath)) {
+      res.send({ failed: 'file already exists' });
+      return;
+    }
     if (!fs.existsSync(dir + '/' + field)) {
       fs.mkdirSync(dir + '/' + field, { recursive: true });
     }
@@ -30,6 +33,6 @@ export default async function handler(req, res) {
     fs.rename(file.filepath, newFilePath, function (err) {
       if (err) console.log('ERROR: ' + err);
     });
+    res.send({ status: 'finished' });
   });
-  res.send({ status: 'finished' });
 }
