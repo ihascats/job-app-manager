@@ -1,6 +1,7 @@
 import JobCard from '@/components/jobCard';
 import NavItems from '@/components/navItems';
 import NewEntry from '@/components/newEntry';
+import ResumeCard from '@/components/resumeCard';
 import ToggleNewButtons from '@/components/toggleNewButtons';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
@@ -61,6 +62,15 @@ export default function Home() {
     'Offer',
   ];
 
+  async function getResumes() {
+    const link = `/api/getResumes`;
+    const response = await fetch(link, {
+      method: 'GET',
+    });
+    const json = await response.json();
+    return json.resumes;
+  }
+
   useEffect(() => {
     function sortJobs(statusList) {
       const arrayOfJobs = structuredClone(jobs);
@@ -81,6 +91,13 @@ export default function Home() {
     }
   }, [jobs]);
 
+  const [resumeList, setResumeList] = useState([]);
+  useEffect(() => {
+    getResumes().then((res) => {
+      setResumeList(res);
+    });
+  }, []);
+
   const [createNewEntry, setCreateNewEntry] = useState(false);
   const [buttonsVisible, setButtonsVisible] = useState(true);
   const [cardVisible, setCardVisible] = useState();
@@ -99,7 +116,14 @@ export default function Home() {
         <div className="flex flex-col-reverse h-screen">
           <nav className="overflow-x-auto bg-green-400 h-[43px]">
             <ul className="flex h-fit">
-              <li className="px-4 py-2 hover:bg-white/30">Resumes</li>
+              <li
+                onClick={filterJobs}
+                data-filter="resumes"
+                className="px-4 py-2 hover:bg-white/30 flex gap-1"
+              >
+                Resumes
+                <p className="text-sm">{resumeList.length}</p>
+              </li>
               {statusList.map((status) => {
                 return (
                   <NavItems
@@ -129,7 +153,7 @@ export default function Home() {
                     />
                   ))
               : null}
-            {filter
+            {filter && filter !== 'resumes'
               ? sortedJobs[filter.toLowerCase()]
                   .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
                   .map((job) => (
@@ -143,6 +167,13 @@ export default function Home() {
                       setButtonsVisible={setButtonsVisible}
                       setCardVisible={setCardVisible}
                     />
+                  ))
+              : null}
+            {filter && filter === 'resumes' && resumeList
+              ? resumeList
+                  .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                  .map((resume) => (
+                    <ResumeCard key={resume.name} resume={resume} />
                   ))
               : null}
           </div>
