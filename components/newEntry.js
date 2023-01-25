@@ -174,7 +174,7 @@ export default function NewEntry({
                 className="p-2 bg-gray-200 font-mono text-sm truncate w-screen-resume-select"
               >
                 {resumeList.map((resume) => (
-                  <option key={resume}>{resume}</option>
+                  <option key={resume.name}>{resume.name}</option>
                 ))}
               </select>
             ) : (
