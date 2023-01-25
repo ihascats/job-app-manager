@@ -3,16 +3,16 @@ import { useRef } from 'react';
 export default function ToggleNewButtons({
   setCreateNewEntry,
   setButtonsVisible,
+  getResumeList,
 }) {
   async function addResume(event) {
     const formData = new FormData(form.current);
     const link = `/api/uploadResume`;
-    const response = await fetch(link, {
+    await fetch(link, {
       method: 'POST',
       body: formData,
     });
-    const json = await response.json();
-    console.log(json);
+    getResumeList();
   }
   const form = useRef();
 
