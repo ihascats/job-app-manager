@@ -92,10 +92,14 @@ export default function Home() {
   }, [jobs]);
 
   const [resumeList, setResumeList] = useState([]);
-  useEffect(() => {
+  function getResumeList() {
     getResumes().then((res) => {
       setResumeList(res);
     });
+  }
+
+  useEffect(() => {
+    getResumeList();
   }, []);
 
   const [createNewEntry, setCreateNewEntry] = useState(false);
@@ -173,7 +177,11 @@ export default function Home() {
               ? resumeList
                   .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
                   .map((resume) => (
-                    <ResumeCard key={resume.name} resume={resume} />
+                    <ResumeCard
+                      key={resume.name}
+                      resume={resume}
+                      getResumeList={getResumeList}
+                    />
                   ))
               : null}
           </div>
@@ -192,6 +200,7 @@ export default function Home() {
           <ToggleNewButtons
             setCreateNewEntry={setCreateNewEntry}
             setButtonsVisible={setButtonsVisible}
+            getResumeList={getResumeList}
           />
         ) : null}
       </main>
