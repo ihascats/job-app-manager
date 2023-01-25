@@ -6,7 +6,9 @@ export default function NavItems({ status, sortedJobs, filterJobs }) {
     <li
       onClick={sortedJobLength ? filterJobs : null}
       className={`px-4 py-2 ${
-        sortedJobLength ? 'hover:bg-white/30' : 'bg-black/20 text-black/60'
+        sortedJobLength && sortedJobLength !== '0'
+          ? 'hover:bg-white/30'
+          : 'bg-black/20 text-black/60'
       } flex gap-1`}
       data-filter={status}
     >

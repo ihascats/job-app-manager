@@ -121,9 +121,13 @@ export default function Home() {
           <nav className="overflow-x-auto bg-green-400 h-[43px]">
             <ul className="flex h-fit">
               <li
-                onClick={filterJobs}
+                onClick={resumeList ? filterJobs : null}
                 data-filter="resumes"
-                className="px-4 py-2 hover:bg-white/30 flex gap-1"
+                className={`px-4 py-2 ${
+                  resumeList.length > 0
+                    ? 'hover:bg-white/30'
+                    : 'bg-black/20 text-black/60'
+                } flex gap-1`}
               >
                 Resumes
                 <p className="text-sm">{resumeList.length}</p>
