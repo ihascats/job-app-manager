@@ -7,11 +7,60 @@ import Head from 'next/head';
 import { useEffect, useState } from 'react';
 
 export default function Home() {
+  const statusList = [
+    'Wishlist',
+    'Applied',
+    'Rejected',
+    'Interview',
+    'Pending',
+    'Offer',
+  ];
+  const [jobs, setJobs] = useState([]);
+  const [resumeList, setResumeList] = useState([]);
+  const [createNewEntry, setCreateNewEntry] = useState(false);
+  const [buttonsVisible, setButtonsVisible] = useState(true);
+  const [cardVisible, setCardVisible] = useState();
+  const [filter, setFilter] = useState();
+  const [sortedJobs, setSortedJobs] = useState();
+
+  function filterJobs(event) {
+    const filter = event.target.dataset.filter;
+    setFilter(filter);
+  }
+
+  function getResumeList() {
+    getResumes().then((res) => {
+      setResumeList(res);
+    });
+  }
+
   async function getData() {
     const link = `/api/getEntries`;
     const response = await fetch(link);
     const json = await response.json();
     return json;
+  }
+
+  async function getResumes() {
+    const link = `/api/getResumes`;
+    const response = await fetch(link, {
+      method: 'GET',
+    });
+    const json = await response.json();
+    return json.resumes;
+  }
+
+  function updateEntryInfo(id, jobData) {
+    const arrayOfJobs = structuredClone(jobs);
+    const newJobList = arrayOfJobs.map((job) => {
+      if (job.id === id) {
+        jobData.createdAt = job.createdAt;
+        jobData.id = id;
+        return jobData;
+      }
+      return job;
+    });
+    setJobs(newJobList);
   }
 
   async function updateJobs(id, jobData) {
@@ -28,48 +77,14 @@ export default function Home() {
     }
   }
 
-  function updateEntryInfo(id, jobData) {
-    const arrayOfJobs = structuredClone(jobs);
-    const newJobList = arrayOfJobs.map((job) => {
-      if (job.id === id) {
-        jobData.createdAt = job.createdAt;
-        jobData.id = id;
-        return jobData;
-      }
-      return job;
-    });
-    setJobs(newJobList);
-  }
-
-  function filterJobs(event) {
-    const filter = event.target.dataset.filter;
-    setFilter(filter);
-  }
-
   useEffect(() => {
+    // fetch all the job entries from api/getEntries then set jobs to the result
     getData().then((result) => {
       setJobs(result.rows);
     });
+
+    getResumeList();
   }, []);
-
-  const [jobs, setJobs] = useState([]);
-  const statusList = [
-    'Wishlist',
-    'Applied',
-    'Rejected',
-    'Interview',
-    'Pending',
-    'Offer',
-  ];
-
-  async function getResumes() {
-    const link = `/api/getResumes`;
-    const response = await fetch(link, {
-      method: 'GET',
-    });
-    const json = await response.json();
-    return json.resumes;
-  }
 
   useEffect(() => {
     function sortJobs(statusList) {
@@ -85,28 +100,12 @@ export default function Home() {
       });
       return obj;
     }
+
     if (jobs.length > 0) {
-      const amounts = sortJobs(statusList);
-      setSortedJobs(amounts);
+      const filterSortedJobs = sortJobs(statusList);
+      setSortedJobs(filterSortedJobs);
     }
   }, [jobs]);
-
-  const [resumeList, setResumeList] = useState([]);
-  function getResumeList() {
-    getResumes().then((res) => {
-      setResumeList(res);
-    });
-  }
-
-  useEffect(() => {
-    getResumeList();
-  }, []);
-
-  const [createNewEntry, setCreateNewEntry] = useState(false);
-  const [buttonsVisible, setButtonsVisible] = useState(true);
-  const [cardVisible, setCardVisible] = useState();
-  const [filter, setFilter] = useState();
-  const [sortedJobs, setSortedJobs] = useState();
 
   return (
     <>
@@ -130,7 +129,21 @@ export default function Home() {
                 } flex gap-1`}
               >
                 Resumes
-                <p className="text-sm">{resumeList.length}</p>
+                <p className="text-sm">{resumeList.length || '0'}</p>
+              </li>
+              <li
+                onClick={() => {
+                  setFilter();
+                }}
+                data-filter="resumes"
+                className={`px-4 py-2 ${
+                  jobs.length > 0
+                    ? 'hover:bg-white/30'
+                    : 'bg-black/20 text-black/60'
+                } flex gap-1`}
+              >
+                All
+                <p className="text-sm">{jobs.length}</p>
               </li>
               {statusList.map((status) => {
                 return (
