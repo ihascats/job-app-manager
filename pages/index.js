@@ -2,7 +2,9 @@ import JobCard from '@/components/jobCard';
 import NavItems from '@/components/navItems';
 import NewEntry from '@/components/newEntry';
 import ResumeCard from '@/components/resumeCard';
+import SignInButtons from '@/components/signInButtons';
 import ToggleNewButtons from '@/components/toggleNewButtons';
+import { useSession } from 'next-auth/react';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
 
@@ -107,6 +109,24 @@ export default function Home() {
     }
   }, [jobs]);
 
+  const { data: session } = useSession();
+  console.log(session);
+
+  if (!session) {
+    return (
+      <>
+        <Head>
+          <title>Job Application Manager</title>
+          <meta name="description" content="Job Application Manager" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+        <main>
+          <SignInButtons />
+        </main>
+      </>
+    );
+  }
   return (
     <>
       <Head>
