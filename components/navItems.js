@@ -13,7 +13,7 @@ export default function NavItems({ status, sortedJobs, filterJobs }) {
       data-filter={status}
     >
       {status}
-      <p className="text-sm">{sortedJobs ? sortedJobLength : null}</p>
+      <p className="text-sm">{sortedJobs ? sortedJobLength : '0'}</p>
     </li>
   );
 }

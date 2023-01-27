@@ -1,4 +1,4 @@
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import { useRef } from 'react';
 import Icons from './icons';
 
@@ -7,9 +7,11 @@ export default function ToggleNewButtons({
   setButtonsVisible,
   getResumeList,
 }) {
+  const { data: session } = useSession();
+
   async function addResume() {
     const formData = new FormData(form.current);
-    const link = `/api/uploadResume`;
+    const link = `/api/${session.user.email}/uploadResume`;
     await fetch(link, {
       method: 'POST',
       body: formData,

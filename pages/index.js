@@ -24,6 +24,7 @@ export default function Home() {
   const [cardVisible, setCardVisible] = useState();
   const [filter, setFilter] = useState();
   const [sortedJobs, setSortedJobs] = useState();
+  const { data: session } = useSession();
 
   function filterJobs(event) {
     const filter = event.target.dataset.filter;
@@ -37,14 +38,14 @@ export default function Home() {
   }
 
   async function getData() {
-    const link = `/api/getEntries`;
+    const link = `/api/${session.user.email}/getEntries`;
     const response = await fetch(link);
     const json = await response.json();
     return json;
   }
 
   async function getResumes() {
-    const link = `/api/getResumes`;
+    const link = `/api/${session.user.email}/getResumes`;
     const response = await fetch(link, {
       method: 'GET',
     });
@@ -81,12 +82,14 @@ export default function Home() {
 
   useEffect(() => {
     // fetch all the job entries from api/getEntries then set jobs to the result
-    getData().then((result) => {
-      setJobs(result.rows);
-    });
+    if (session) {
+      getData().then((result) => {
+        setJobs(result.rows);
+      });
 
-    getResumeList();
-  }, []);
+      getResumeList();
+    }
+  }, [session]);
 
   useEffect(() => {
     function sortJobs(statusList) {
@@ -108,9 +111,6 @@ export default function Home() {
       setSortedJobs(filterSortedJobs);
     }
   }, [jobs]);
-
-  const { data: session } = useSession();
-  console.log(session);
 
   if (!session) {
     return (
