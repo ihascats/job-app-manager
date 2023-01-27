@@ -2,8 +2,8 @@ const fs = require('fs');
 const path = require('path');
 
 export default async function handler(req, res) {
-  const { name } = req.query;
-  const directoryPath = `./uploads/${process.env.USERNAME}/resume`;
+  const { user, name } = req.query;
+  const directoryPath = `./uploads/${user}/resume`;
   const filePath = path.join(directoryPath, name);
 
   if (req.method === 'GET') {

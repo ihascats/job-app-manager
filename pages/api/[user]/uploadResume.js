@@ -13,10 +13,11 @@ export default async function handler(req, res) {
     res.status(405).send({ message: 'Only POST requests allowed' });
     return;
   }
+  const { user } = req.query;
 
   const form = new formidable.IncomingForm();
   form.options.keepExtensions = true;
-  const dir = `./uploads/${process.env.USERNAME}`;
+  const dir = `./uploads/${user}`;
 
   form.parse(req);
   form.on('file', function (field, file) {

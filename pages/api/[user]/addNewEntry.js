@@ -14,12 +14,13 @@ export default async function handler(req, res) {
     res.status(405).send({ message: 'Only POST requests allowed' });
     return;
   }
+  const { user } = req.query;
 
   const connection = mysql.createConnection(process.env.DATABASE_URL);
 
   const form = new formidable.IncomingForm();
   form.options.keepExtensions = true;
-  const dir = `./uploads/${process.env.USERNAME}`;
+  const dir = `./uploads/${user}`;
 
   form.on('file', function (field, file) {
     form.uploadDir = dir + '/' + field;
@@ -50,7 +51,7 @@ export default async function handler(req, res) {
       .slice(0, 19)
       .replace('T', ' ')}`;
     connection.query(
-      `INSERT INTO job_listing (createdAt, status, company, position, link, location, salary, notes, resume, cover) VALUES ('${createdAt}', '${status}' ,'${company}', '${position}', '${link}', '${location}', '${salary}', '${notes}', '${resume}', '${cover}')`,
+      `INSERT INTO job_listing (createdAt, status, company, position, link, location, salary, notes, resume, cover, user) VALUES ('${createdAt}', '${status}' ,'${company}', '${position}', '${link}', '${location}', '${salary}', '${notes}', '${resume}', '${cover}', '${user}')`,
       (err, rows) => {
         console.log(rows);
         res.send({ insertedId: rows.insertId, createdAt });

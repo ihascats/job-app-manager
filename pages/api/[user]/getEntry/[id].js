@@ -10,7 +10,7 @@ export const config = {
 };
 
 export default async function handler(req, res) {
-  const { id } = req.query;
+  const { user, id } = req.query;
   const connection = mysql.createConnection(process.env.DATABASE_URL);
 
   if (req.method === 'GET') {
@@ -38,7 +38,7 @@ export default async function handler(req, res) {
   if (req.method === 'PUT') {
     const form = new formidable.IncomingForm();
     form.options.keepExtensions = true;
-    const dir = `./uploads/${process.env.USERNAME}`;
+    const dir = `./uploads/${user}`;
 
     form.on('file', function (field, file) {
       form.uploadDir = dir + '/' + field;

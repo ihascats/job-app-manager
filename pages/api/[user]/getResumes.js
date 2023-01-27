@@ -2,7 +2,11 @@ const fs = require('fs');
 const path = require('path');
 
 export default async function handler(req, res) {
-  const directoryPath = `./uploads/${process.env.USERNAME}/resume`;
+  const { user } = req.query;
+  const directoryPath = `./uploads/${user}/resume`;
+  if (!fs.existsSync(directoryPath)) {
+    fs.mkdirSync(directoryPath, { recursive: true });
+  }
 
   const fileArray = fs.readdirSync(directoryPath, function (err) {
     if (err) throw err;
