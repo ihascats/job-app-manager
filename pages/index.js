@@ -136,9 +136,9 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
+      <main className="dark">
         <div className="flex flex-col-reverse h-screen">
-          <nav className="overflow-x-auto bg-green-400 h-[43px]">
+          <nav className="overflow-x-auto bg-green-400 dark:bg-neutral-800 dark:text-green-400 h-[43px]">
             <ul className="flex h-fit">
               <li
                 onClick={resumeList ? filterJobs : null}
@@ -146,7 +146,7 @@ export default function Home() {
                 className={`px-4 py-2 ${
                   resumeList.length > 0
                     ? 'hover:bg-white/30'
-                    : 'bg-black/20 text-black/60'
+                    : 'bg-black/20 text-black/60 dark:text-green-400/60'
                 } flex gap-1`}
               >
                 Resumes
@@ -160,7 +160,7 @@ export default function Home() {
                 className={`px-4 py-2 ${
                   jobs.length > 0
                     ? 'hover:bg-white/30'
-                    : 'bg-black/20 text-black/60'
+                    : 'bg-black/20 text-black/60 dark:text-green-400/60'
                 } flex gap-1`}
               >
                 All
@@ -179,7 +179,7 @@ export default function Home() {
               <Settings setButtonsVisible={setButtonsVisible} />
             </ul>
           </nav>
-          <div className="flex flex-col h-full bg-purple-300 p-4 gap-y-4 overflow-x-auto max-w-screen">
+          <div className="flex flex-col h-full bg-blue-300 dark:bg-neutral-700 p-4 gap-y-4 overflow-x-auto max-w-screen">
             {jobs.length > 0 && !filter
               ? jobs
                   .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))

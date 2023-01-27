@@ -16,12 +16,20 @@ export default function JobCard({
         setButtonsVisible(false);
         setCardVisible(job);
       }}
-      className="rounded-xl p-2 bg-white h-fit w-screen-p4"
+      className="rounded-xl p-2 bg-white dark:bg-slate-800 h-fit w-screen-p4"
     >
-      <h1 className={`font-bold truncate ${!company ? 'text-black/40' : null}`}>
+      <h1
+        className={`font-bold truncate dark:text-lime-300 ${
+          !company ? 'text-black/40 dark:text-lime-300/40' : null
+        }`}
+      >
         {company || 'Company name missing'}
       </h1>
-      <h2 className={`truncate ${!position ? 'text-black/40' : null}`}>
+      <h2
+        className={`truncate dark:text-lime-400 ${
+          !position ? 'text-black/40 dark:text-lime-400/40' : null
+        }`}
+      >
         {position || 'Position name missing'}
       </h2>
       <Timestamp createdAt={createdAt} />

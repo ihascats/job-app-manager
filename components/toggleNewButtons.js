@@ -26,12 +26,12 @@ export default function ToggleNewButtons({
           setCreateNewEntry(true);
           setButtonsVisible(false);
         }}
-        className="h-9 w-9 bg-emerald-500 text-3xl rounded-md"
+        className="h-9 w-9 bg-emerald-500 dark:bg-neutral-900 dark:text-emerald-500 text-3xl rounded-md"
       >
         +
       </button>
       <form ref={form} onChange={addResume} className="h-[35px] pt-1">
-        <label className="p-2 bg-emerald-500 text-sm rounded-md">
+        <label className="p-2 bg-emerald-500 dark:bg-neutral-900 dark:text-emerald-500 text-sm rounded-md">
           Add Resume
           <input hidden name="resume" type="file"></input>
         </label>

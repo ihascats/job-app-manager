@@ -124,27 +124,27 @@ export default function NewEntry({
   return (
     <div className="bg-black/30 py-6 px-4 h-screen absolute top-0 w-full">
       {saving ? (
-        <div className="rounded-xl bg-white w-screen-p4 h-screen-p4 backdrop-blur-md flex flex-col text-neutral-800 justify-center items-center fixed">
+        <div className="rounded-xl bg-white dark:bg-slate-800 dark:text-neutral-200 w-screen-p4 h-screen-p4 backdrop-blur-md flex flex-col text-neutral-800 justify-center items-center fixed">
           {icons.loading}
           <p className="font-mono">Saving job data..</p>
         </div>
       ) : cardVisible && !jobData ? (
-        <div className="rounded-xl bg-white w-screen-p4 h-screen-p4 backdrop-blur-md flex flex-col text-neutral-800 justify-center items-center fixed">
+        <div className="rounded-xl bg-white dark:bg-slate-800 dark:text-neutral-200 w-screen-p4 h-screen-p4 backdrop-blur-md flex flex-col text-neutral-800 justify-center items-center fixed">
           {icons.loading}
           <p className="font-mono">Loading job data..</p>
         </div>
       ) : (
         <form
           onSubmit={save}
-          className="bg-white rounded-xl h-full w-full py-4 px-2 flex flex-col-reverse gap-4"
+          className="bg-white dark:bg-slate-800 dark:text-neutral-200 rounded-xl h-full w-full py-4 px-2 flex flex-col-reverse gap-4 z-50"
         >
-          <div className="flex justify-end">
+          <div className="flex justify-end dark:text-neutral-50">
             {cardVisible ? (
               <button
                 onClick={(event) => {
                   deleteEntry(event, cardVisible);
                 }}
-                className="py-2 px-4 bg-red-500"
+                className="py-2 px-4 bg-red-500 dark:bg-neutral-900 dark:text-red-500"
               >
                 Delete
               </button>
@@ -154,20 +154,25 @@ export default function NewEntry({
                 onClick={(event) => {
                   updateEntry(event, cardVisible);
                 }}
-                className="py-2 px-4 bg-lime-500"
+                className="py-2 px-4 bg-lime-500 dark:bg-neutral-800 dark:text-lime-500"
               >
                 Update
               </button>
             ) : (
-              <button className="py-2 px-4 bg-lime-500">Save</button>
+              <button className="py-2 px-4 bg-lime-500 dark:bg-neutral-800 dark:text-lime-500">
+                Save
+              </button>
             )}
-            <button onClick={cancel} className="py-2 px-4 bg-yellow-500">
+            <button
+              onClick={cancel}
+              className="py-2 px-4 bg-yellow-500 dark:bg-neutral-700 dark:text-yellow-500"
+            >
               Cancel
             </button>
           </div>
           <select
             name="status"
-            className="p-2 bg-gray-200"
+            className="p-2 bg-gray-200 dark:bg-slate-600"
             defaultValue={jobData ? jobData.status : 'Wishlist'}
           >
             <option>Wishlist</option>
@@ -181,15 +186,17 @@ export default function NewEntry({
             {resumeSelectSwitch && resumeList.length > 0 ? (
               <select
                 name="resume"
-                className="p-2 bg-gray-200 font-mono text-sm truncate w-screen-resume-select"
+                className="p-2 bg-gray-200 dark:bg-slate-600 font-mono text-sm truncate w-screen-resume-select"
                 defaultValue={jobData ? jobData.resume : ''}
               >
                 {resumeList.map((resume) => (
-                  <option key={resume.name}>{resume.name}</option>
+                  <option className="dark:bg-slate-600" key={resume.name}>
+                    {resume.name}
+                  </option>
                 ))}
               </select>
             ) : (
-              <label className="py-2 px-4 bg-gray-200 font-mono text-sm truncate w-screen-resume-select">
+              <label className="py-2 px-4 bg-gray-200 dark:bg-slate-600 font-mono text-sm truncate w-screen-resume-select">
                 Resume
                 {resumeFileName ? `: ${resumeFileName}` : ': select a file'}
                 <input
@@ -209,12 +216,12 @@ export default function NewEntry({
                 event.preventDefault();
                 setResumeSelectSwitch((prev) => !prev);
               }}
-              className="p-2 bg-gray-400 font-mono text-sm w-9"
+              className="p-2 bg-gray-400 dark:bg-slate-700 font-mono text-sm w-9"
             >
               C
             </button>
           </div>
-          <label className="py-2 px-4 bg-gray-200 font-mono text-sm truncate">
+          <label className="py-2 px-4 bg-gray-200 dark:bg-slate-600 font-mono text-sm truncate">
             Cover Letter
             {jobData
               ? `: ${jobData.cover}`
@@ -233,37 +240,37 @@ export default function NewEntry({
             ></input>
           </label>
           <input
-            className="border-b-2 border-b-black/20 w-full font-bold text-xl placeholder-black/80"
+            className="border-b-2 dark:bg-slate-800 border-b-black/20 w-full font-bold text-xl placeholder-black/80 dark:placeholder-white/80"
             placeholder="Company"
             name="company"
             defaultValue={jobData ? jobData.company : ''}
           ></input>
           <input
-            className="border-b-2 border-b-black/20 w-full"
+            className="border-b-2 dark:bg-slate-800 border-b-black/20 w-full"
             placeholder="Position"
             name="position"
             defaultValue={jobData ? jobData.position : ''}
           ></input>
           <input
-            className="border-b-2 border-b-black/20 w-full placeholder-blue-500"
+            className="border-b-2 dark:bg-slate-800 border-b-black/20 w-full placeholder-blue-500"
             placeholder="Link"
             name="link"
             defaultValue={jobData ? jobData.link : ''}
           ></input>
           <input
-            className="border-b-2 border-b-black/20 w-full placeholder-green-500"
+            className="border-b-2 dark:bg-slate-800 border-b-black/20 w-full placeholder-green-500"
             placeholder="Location"
             name="location"
             defaultValue={jobData ? jobData.location : ''}
           ></input>
           <input
-            className="border-b-2 border-b-black/20 w-full placeholder-yellow-500"
+            className="border-b-2 dark:bg-slate-800 border-b-black/20 w-full placeholder-yellow-500"
             placeholder="Salary"
             name="salary"
             defaultValue={jobData ? jobData.salary : ''}
           ></input>
           <textarea
-            className="border-b-2 border-b-black/20 w-full"
+            className="border-b-2 dark:bg-slate-800 border-b-black/20 w-full"
             placeholder="Notes"
             name="notes"
             defaultValue={jobData ? jobData.notes : ''}
