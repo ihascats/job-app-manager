@@ -1,3 +1,4 @@
+import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import Icons from './icons';
 
@@ -15,9 +16,10 @@ export default function NewEntry({
   const [resumeSelectSwitch, setResumeSelectSwitch] = useState(true);
   const [jobData, setJobData] = useState();
   const [saving, setSaving] = useState(false);
+  const { data: session } = useSession();
 
   async function getResumes() {
-    const link = `/api/getResumes`;
+    const link = `/api/${session.user.email}/getResumes`;
     const response = await fetch(link, {
       method: 'GET',
     });
@@ -25,15 +27,15 @@ export default function NewEntry({
     return json.resumes;
   }
 
-  useEffect(() => {
-    getResumes().then((result) => {
-      setResumeList(result);
+  async function deleteEntry(event, { id }) {
+    event.preventDefault();
+    updateJobs(id);
+    cancel();
+    const link = `/api/${session.user.email}/getEntry/${id}`;
+    await fetch(link, {
+      method: 'DELETE',
     });
-
-    if (cardVisible) {
-      setJobData(cardVisible);
-    }
-  }, [cardVisible]);
+  }
 
   function cancel(event) {
     if (event) {
@@ -61,7 +63,7 @@ export default function NewEntry({
     updateEntryInfo(id, obj);
     cancel();
 
-    const link = `/api/getEntry/${id}`;
+    const link = `/api/${session.user.email}/getEntry/${id}`;
     await fetch(link, {
       method: 'PUT',
       body: formData,
@@ -84,7 +86,7 @@ export default function NewEntry({
       }
     });
 
-    const link = `/api/addNewEntry`;
+    const link = `/api/${session.user.email}/addNewEntry`;
     await fetch(link, {
       method: 'POST',
       body: formData,
@@ -99,15 +101,23 @@ export default function NewEntry({
     });
   }
 
-  async function deleteEntry(event, { id }) {
-    event.preventDefault();
-    updateJobs(id);
-    cancel();
-    const link = `/api/getEntry/${id}`;
-    await fetch(link, {
-      method: 'DELETE',
-    });
-  }
+  useEffect(() => {
+    if (session && cardVisible) {
+      setJobData(cardVisible);
+    }
+    if (jobData) {
+      if (jobData.resume === '') {
+        setResumeSelectSwitch(false);
+      }
+      getResumes().then((result) => {
+        if (!result.some((resume) => resume.name === jobData.resume)) {
+          // if resume under a listed name doesn't exist add an object with said name
+          result.push({ name: jobData.resume });
+        }
+        setResumeList(result);
+      });
+    }
+  }, [cardVisible, session, jobData]);
 
   const icons = Icons();
 
@@ -172,6 +182,7 @@ export default function NewEntry({
               <select
                 name="resume"
                 className="p-2 bg-gray-200 font-mono text-sm truncate w-screen-resume-select"
+                defaultValue={jobData ? jobData.resume : ''}
               >
                 {resumeList.map((resume) => (
                   <option key={resume.name}>{resume.name}</option>
