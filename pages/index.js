@@ -2,6 +2,7 @@ import JobCard from '@/components/jobCard';
 import NavItems from '@/components/navItems';
 import NewEntry from '@/components/newEntry';
 import ResumeCard from '@/components/resumeCard';
+import Settings from '@/components/settings';
 import SignInButtons from '@/components/signInButtons';
 import ToggleNewButtons from '@/components/toggleNewButtons';
 import { useSession } from 'next-auth/react';
@@ -175,6 +176,7 @@ export default function Home() {
                   />
                 );
               })}
+              <Settings setButtonsVisible={setButtonsVisible} />
             </ul>
           </nav>
           <div className="flex flex-col h-full bg-purple-300 p-4 gap-y-4 overflow-x-auto max-w-screen">
