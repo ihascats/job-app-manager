@@ -122,7 +122,7 @@ export default function NewEntry({
   const icons = Icons();
 
   return (
-    <div className="bg-black/30 py-6 px-4 h-screen absolute top-0 w-full">
+    <div className="bg-black/30 py-6 px-4 h-screen absolute top-0 w-full z-50">
       {saving ? (
         <div className="rounded-xl bg-white dark:bg-slate-800 dark:text-neutral-200 w-screen-p4 h-screen-p4 backdrop-blur-md flex flex-col text-neutral-800 justify-center items-center fixed">
           {icons.loading}

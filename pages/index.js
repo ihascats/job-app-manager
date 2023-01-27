@@ -25,6 +25,7 @@ export default function Home() {
   const [cardVisible, setCardVisible] = useState();
   const [filter, setFilter] = useState();
   const [sortedJobs, setSortedJobs] = useState();
+  const [darkTheme, setDarkTheme] = useState(false);
   const { data: session } = useSession();
 
   function filterJobs(event) {
@@ -82,6 +83,11 @@ export default function Home() {
   }
 
   useEffect(() => {
+    if (localStorage.dark)
+      setDarkTheme(localStorage.dark === 'true' ? true : false);
+  }, []);
+
+  useEffect(() => {
     // fetch all the job entries from api/getEntries then set jobs to the result
     if (session) {
       getData().then((result) => {
@@ -136,7 +142,11 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="dark">
+      <main
+        className={
+          localStorage.dark === 'true' ? 'dark' : darkTheme ? 'dark' : null
+        }
+      >
         <div className="flex flex-col-reverse h-screen">
           <nav className="overflow-x-auto bg-green-400 dark:bg-neutral-800 dark:text-green-400 h-[43px]">
             <ul className="flex h-fit">
@@ -176,7 +186,11 @@ export default function Home() {
                   />
                 );
               })}
-              <Settings setButtonsVisible={setButtonsVisible} />
+              <Settings
+                setButtonsVisible={setButtonsVisible}
+                setDarkTheme={setDarkTheme}
+                buttonsVisible={buttonsVisible}
+              />
             </ul>
           </nav>
           <div className="flex flex-col h-full bg-blue-300 dark:bg-neutral-700 p-4 gap-y-4 overflow-x-auto max-w-screen">
