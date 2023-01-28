@@ -20,7 +20,7 @@ export default function ToggleNewButtons({
   const form = useRef();
 
   return (
-    <div className="flex flex-col absolute bottom-12 right-2 items-end gap-2">
+    <div className="flex flex-col absolute bottom-[78px] right-2 items-end gap-2">
       <button
         onClick={() => {
           setCreateNewEntry(true);

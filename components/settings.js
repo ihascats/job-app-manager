@@ -33,7 +33,7 @@ export default function Settings({
   return (
     <div className="sticky right-0 h-10 w-10 p-2 bg-emerald-500 dark:bg-neutral-900 dark:fill-emerald-500 dark:text-emerald-500 rounded-l z-50">
       {settingsVisible ? (
-        <div className="bg-emerald-500/60 dark:bg-neutral-900/60 w-fit fixed bottom-10 right-0 flex flex-col p-2 items-end gap-1">
+        <div className="bg-emerald-500/60 dark:bg-neutral-900/60 w-fit fixed bottom-[74px] right-0 flex flex-col p-2 items-end gap-1">
           <button
             onClick={changeTheme}
             className="flex gap-2 w-full justify-end"

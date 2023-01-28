@@ -1,4 +1,5 @@
 import JobCard from '@/components/jobCard';
+import JobSearch from '@/components/jobSearch';
 import NavItems from '@/components/navItems';
 import NewEntry from '@/components/newEntry';
 import ResumeCard from '@/components/resumeCard';
@@ -148,7 +149,7 @@ export default function Home() {
         }
       >
         <div className="flex flex-col-reverse h-screen">
-          <nav className="overflow-x-auto bg-green-400 dark:bg-neutral-800 dark:text-green-400 h-[43px]">
+          <nav className="overflow-x-auto bg-green-400 dark:bg-neutral-800 dark:text-green-400 h-[88px] flex flex-col-reverse">
             <ul className="flex h-fit">
               <li
                 onClick={resumeList ? filterJobs : null}
@@ -192,8 +193,14 @@ export default function Home() {
                 buttonsVisible={buttonsVisible}
               />
             </ul>
+            <JobSearch
+              jobs={jobs}
+              setCreateNewEntry={setCreateNewEntry}
+              setButtonsVisible={setButtonsVisible}
+              setCardVisible={setCardVisible}
+            />
           </nav>
-          <div className="flex flex-col h-full bg-blue-300 dark:bg-neutral-700 p-4 gap-y-4 overflow-x-auto max-w-screen">
+          <div className="flex flex-col-reverse h-full bg-blue-300 dark:bg-neutral-700 p-4 gap-y-4 overflow-x-auto max-w-screen">
             {jobs.length > 0 && !filter
               ? jobs
                   .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
