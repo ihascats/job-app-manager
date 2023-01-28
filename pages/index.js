@@ -12,8 +12,8 @@ import { useEffect, useState } from 'react';
 
 export default function Home() {
   const statusList = [
-    'Wishlist',
     'Applied',
+    'Wishlist',
     'Rejected',
     'Interview',
     'Pending',
@@ -254,6 +254,7 @@ export default function Home() {
             setCardVisible={setCardVisible}
             updateJobs={updateJobs}
             updateEntryInfo={updateEntryInfo}
+            statusList={statusList}
           />
         ) : null}
         {buttonsVisible ? (

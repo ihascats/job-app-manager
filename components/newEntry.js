@@ -9,6 +9,7 @@ export default function NewEntry({
   setCardVisible,
   updateJobs,
   updateEntryInfo,
+  statusList,
 }) {
   const [coverLetterFileName, setCoverLetterFileName] = useState();
   const [resumeFileName, setResumeFileName] = useState();
@@ -173,14 +174,13 @@ export default function NewEntry({
           <select
             name="status"
             className="p-2 bg-gray-200 dark:bg-slate-600"
-            defaultValue={jobData ? jobData.status : 'Wishlist'}
+            defaultValue={jobData ? jobData.status : 'Applied'}
           >
-            <option>Wishlist</option>
-            <option>Applied</option>
-            <option>Rejected</option>
-            <option>Interview</option>
-            <option>Pending</option>
-            <option>Offer</option>
+            {statusList
+              ? statusList.map((option) => (
+                  <option key={option}>{option}</option>
+                ))
+              : null}
           </select>
           <div className="w-full flex">
             {resumeSelectSwitch && resumeList.length > 0 ? (
