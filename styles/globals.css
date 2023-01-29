@@ -11,9 +11,22 @@
   }
 }
 
+@keyframes disappear {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
 /* Apply the animation to the SVG element */
 .loading {
   animation: spin 2s backwards infinite;
+}
+
+.errorMessage {
+  animation: disappear 2s forwards cubic-bezier(1, -0.03, 0.46, 0.57);
 }
 
 .hide-scroll::-webkit-scrollbar {
