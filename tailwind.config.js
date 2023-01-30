@@ -14,6 +14,9 @@ module.exports = {
         'screen-p4': 'calc(100vw - 32px)',
         'screen-resume-select': 'calc(100% - 36px);',
       },
+      minWidth: {
+        'screen-p4': 'calc(100vw - 32px)',
+      },
     },
   },
   plugins: [],

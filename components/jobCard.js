@@ -29,7 +29,7 @@ export default function JobCard({
         setCardVisible(job);
       }}
       className={`rounded-xl p-2 bg-white dark:bg-slate-800 h-fit ${
-        mobile ? 'w-screen-p4' : ''
+        mobile ? 'w-screen-p4 max-w-[400px]' : ''
       }`}
     >
       <h1

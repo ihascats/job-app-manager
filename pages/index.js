@@ -216,7 +216,7 @@ export default function Home() {
                 setCardVisible={setCardVisible}
               />
             </nav>
-            <div className="flex flex-col-reverse h-full bg-blue-300 dark:bg-neutral-700 p-4 gap-y-4 overflow-x-auto max-w-screen">
+            <div className="flex flex-col-reverse h-full bg-blue-300 dark:bg-neutral-700 p-4 gap-y-4 overflow-x-auto max-w-screen items-center">
               {jobs.length > 0 && !filter
                 ? jobs
                     .sort(

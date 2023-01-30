@@ -1,5 +1,6 @@
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
+import DeleteConfirmation from './deleteConfirmation';
 import Icons from './icons';
 
 export default function NewEntry({
@@ -32,8 +33,7 @@ export default function NewEntry({
     return json.resumes;
   }
 
-  async function deleteEntry(event, { id }) {
-    event.preventDefault();
+  async function deleteEntry({ id }) {
     updateJobs(id);
     cancel();
     const link = `/api/${session.user.email}/getEntry/${id}`;
@@ -139,19 +139,36 @@ export default function NewEntry({
     window.addEventListener('resize', screenWidth);
   }, []);
 
+  const [deleteConfirmationVisible, setDeleteConfirmationVisible] =
+    useState(false);
+
+  function proceed() {
+    deleteEntry(cardVisible);
+  }
+  function terminate() {
+    setDeleteConfirmationVisible(false);
+  }
+
   const icons = Icons();
 
   return (
     <div
       onClick={cancel}
-      className={`bg-black/30 py-6 px-4 h-screen absolute top-0 w-full z-50 ${
-        mobile ? '' : 'flex justify-center'
-      }`}
+      className={`bg-black/30 py-6 px-4 h-screen absolute top-0 w-full z-50 flex justify-center`}
     >
+      {deleteConfirmationVisible ? (
+        <DeleteConfirmation
+          proceed={proceed}
+          terminate={terminate}
+          elementStopPropagation={elementStopPropagation}
+        />
+      ) : null}
       {saving ? (
         <div
           onClick={elementStopPropagation}
-          className="rounded-xl bg-white dark:bg-slate-800 dark:text-neutral-200 w-screen-p4 h-screen-p4 backdrop-blur-md flex flex-col text-neutral-800 justify-center items-center fixed"
+          className={`rounded-xl bg-white dark:bg-slate-800 dark:text-neutral-200 w-screen-p4 h-screen-p4 backdrop-blur-md flex flex-col text-neutral-800 justify-center items-center fixed ${
+            mobile ? 'w-screen-p4 max-w-[400px]' : 'max-w-[500px]'
+          }`}
         >
           {icons.loading}
           <p className="font-mono">Saving job data..</p>
@@ -159,7 +176,9 @@ export default function NewEntry({
       ) : cardVisible && !jobData ? (
         <div
           onClick={elementStopPropagation}
-          className="rounded-xl bg-white dark:bg-slate-800 dark:text-neutral-200 w-screen-p4 h-screen-p4 backdrop-blur-md flex flex-col text-neutral-800 justify-center items-center fixed"
+          className={`rounded-xl bg-white dark:bg-slate-800 dark:text-neutral-200 w-screen-p4 h-screen-p4 backdrop-blur-md flex flex-col text-neutral-800 justify-center items-center fixed ${
+            mobile ? 'w-screen-p4 max-w-[400px]' : 'max-w-[500px]'
+          }`}
         >
           {icons.loading}
           <p className="font-mono">Loading job data..</p>
@@ -170,13 +189,14 @@ export default function NewEntry({
           onSubmit={save}
           className={`bg-white dark:bg-slate-800 dark:text-neutral-200 rounded-xl h-full w-full py-4 px-2 flex  gap-4 z-50 ${
             mobile ? 'flex-col-reverse' : ' flex-col max-w-[500px]'
-          }`}
+          } ${mobile ? 'w-screen-p4 max-w-[400px]' : ''}`}
         >
           <div className="flex justify-end dark:text-neutral-50">
             {cardVisible ? (
               <button
                 onClick={(event) => {
-                  deleteEntry(event, cardVisible);
+                  event.preventDefault();
+                  setDeleteConfirmationVisible(true);
                 }}
                 className="py-2 px-4 bg-red-500 dark:bg-neutral-900 dark:text-red-500"
               >
