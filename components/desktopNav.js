@@ -67,6 +67,7 @@ export default function DesktopNav({
 
   return (
     <nav className="bg-green-400 dark:bg-neutral-800 dark:text-green-400 dark:fill-green-400 h-10 flex w-full whitespace-nowrap">
+      {uploadStatus}
       <button
         onClick={() => {
           setCreateNewEntry(true);
