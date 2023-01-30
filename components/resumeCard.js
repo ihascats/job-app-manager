@@ -32,8 +32,23 @@ export default function ResumeCard({ resume, getResumeList }) {
     }
   }, [resume.name, session]);
 
+  const [mobile, setMobile] = useState(false);
+
+  function screenWidth(event) {
+    setMobile(event.target.innerWidth <= 768);
+  }
+
+  useEffect(() => {
+    setMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', screenWidth);
+  }, []);
+
   return (
-    <div className="rounded-xl p-2 bg-white dark:bg-slate-800 dark:text-lime-300 h-fit w-screen-p4">
+    <div
+      className={`rounded-xl p-2 bg-white dark:bg-slate-800 dark:text-lime-300 h-fit ${
+        mobile ? 'w-screen-p4' : ''
+      }`}
+    >
       <h1 className={`font-bold truncate`}>{resume.name}</h1>
       <Timestamp createdAt={resume.createdAt} />
       <div className="w-full grid grid-cols-2">

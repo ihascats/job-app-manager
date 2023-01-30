@@ -1,3 +1,4 @@
+import DesktopJobSearch from '@/components/desktopJobSearch';
 import JobCard from '@/components/jobCard';
 import JobSearch from '@/components/jobSearch';
 import NavItems from '@/components/navItems';
@@ -99,6 +100,18 @@ export default function Home() {
     }
   }, [session]);
 
+  // mobile switch
+  const [mobile, setMobile] = useState(false);
+
+  function screenWidth(event) {
+    setMobile(event.target.innerWidth <= 768);
+  }
+
+  useEffect(() => {
+    setMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', screenWidth);
+  }, []);
+
   useEffect(() => {
     function sortJobs(statusList) {
       const arrayOfJobs = structuredClone(jobs);
@@ -135,6 +148,146 @@ export default function Home() {
       </>
     );
   }
+  if (mobile) {
+    return (
+      <>
+        <Head>
+          <title>Job Application Manager</title>
+          <meta name="description" content="Job Application Manager" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+        <main
+          className={
+            localStorage.dark === 'true' ? 'dark' : darkTheme ? 'dark' : null
+          }
+        >
+          <div className="flex flex-col-reverse h-screen">
+            <nav className="overflow-x-auto bg-green-400 dark:bg-neutral-800 dark:text-green-400 h-[88px] flex flex-col-reverse">
+              <ul className="flex h-fit">
+                <li
+                  onClick={resumeList ? filterJobs : null}
+                  data-filter="resumes"
+                  className={`px-4 py-2 ${
+                    resumeList.length > 0
+                      ? 'hover:bg-white/30'
+                      : 'bg-black/20 text-black/60 dark:text-green-400/60'
+                  } flex gap-1`}
+                >
+                  Resumes
+                  <p className="text-sm">{resumeList.length || '0'}</p>
+                </li>
+                <li
+                  onClick={() => {
+                    setFilter();
+                  }}
+                  data-filter="resumes"
+                  className={`px-4 py-2 ${
+                    jobs.length > 0
+                      ? 'hover:bg-white/30'
+                      : 'bg-black/20 text-black/60 dark:text-green-400/60'
+                  } flex gap-1`}
+                >
+                  All
+                  <p className="text-sm">{jobs.length}</p>
+                </li>
+                {statusList.map((status) => {
+                  return (
+                    <NavItems
+                      key={status}
+                      status={status}
+                      sortedJobs={sortedJobs}
+                      filterJobs={filterJobs}
+                    />
+                  );
+                })}
+                <Settings
+                  setButtonsVisible={setButtonsVisible}
+                  setDarkTheme={setDarkTheme}
+                  buttonsVisible={buttonsVisible}
+                />
+              </ul>
+              <JobSearch
+                jobs={jobs}
+                setCreateNewEntry={setCreateNewEntry}
+                setButtonsVisible={setButtonsVisible}
+                setCardVisible={setCardVisible}
+              />
+            </nav>
+            <div className="flex flex-col-reverse h-full bg-blue-300 dark:bg-neutral-700 p-4 gap-y-4 overflow-x-auto max-w-screen">
+              {jobs.length > 0 && !filter
+                ? jobs
+                    .sort(
+                      (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+                    )
+                    .map((job) => (
+                      <JobCard
+                        key={job.id || job.createdAt}
+                        company={job.company}
+                        position={job.position}
+                        createdAt={job.createdAt}
+                        job={job}
+                        setCreateNewEntry={setCreateNewEntry}
+                        setButtonsVisible={setButtonsVisible}
+                        setCardVisible={setCardVisible}
+                      />
+                    ))
+                : null}
+              {filter && filter !== 'resumes'
+                ? sortedJobs[filter.toLowerCase()]
+                    .sort(
+                      (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+                    )
+                    .map((job) => (
+                      <JobCard
+                        key={job.id || job.createdAt}
+                        company={job.company}
+                        position={job.position}
+                        createdAt={job.createdAt}
+                        job={job}
+                        setCreateNewEntry={setCreateNewEntry}
+                        setButtonsVisible={setButtonsVisible}
+                        setCardVisible={setCardVisible}
+                      />
+                    ))
+                : null}
+              {filter && filter === 'resumes' && resumeList
+                ? resumeList
+                    .sort(
+                      (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+                    )
+                    .map((resume) => (
+                      <ResumeCard
+                        key={resume.name}
+                        resume={resume}
+                        getResumeList={getResumeList}
+                      />
+                    ))
+                : null}
+            </div>
+          </div>
+          {createNewEntry ? (
+            <NewEntry
+              setCreateNewEntry={setCreateNewEntry}
+              setButtonsVisible={setButtonsVisible}
+              cardVisible={cardVisible}
+              setCardVisible={setCardVisible}
+              updateJobs={updateJobs}
+              updateEntryInfo={updateEntryInfo}
+              statusList={statusList}
+            />
+          ) : null}
+          {buttonsVisible ? (
+            <ToggleNewButtons
+              setCreateNewEntry={setCreateNewEntry}
+              setButtonsVisible={setButtonsVisible}
+              getResumeList={getResumeList}
+            />
+          ) : null}
+        </main>
+      </>
+    );
+  }
   return (
     <>
       <Head>
@@ -148,102 +301,65 @@ export default function Home() {
           localStorage.dark === 'true' ? 'dark' : darkTheme ? 'dark' : null
         }
       >
-        <div className="flex flex-col-reverse h-screen">
-          <nav className="overflow-x-auto bg-green-400 dark:bg-neutral-800 dark:text-green-400 h-[88px] flex flex-col-reverse">
-            <ul className="flex h-fit">
-              <li
-                onClick={resumeList ? filterJobs : null}
-                data-filter="resumes"
-                className={`px-4 py-2 ${
-                  resumeList.length > 0
-                    ? 'hover:bg-white/30'
-                    : 'bg-black/20 text-black/60 dark:text-green-400/60'
-                } flex gap-1`}
-              >
-                Resumes
-                <p className="text-sm">{resumeList.length || '0'}</p>
-              </li>
-              <li
-                onClick={() => {
-                  setFilter();
-                }}
-                data-filter="resumes"
-                className={`px-4 py-2 ${
-                  jobs.length > 0
-                    ? 'hover:bg-white/30'
-                    : 'bg-black/20 text-black/60 dark:text-green-400/60'
-                } flex gap-1`}
-              >
-                All
-                <p className="text-sm">{jobs.length}</p>
-              </li>
-              {statusList.map((status) => {
-                return (
-                  <NavItems
-                    key={status}
-                    status={status}
-                    sortedJobs={sortedJobs}
-                    filterJobs={filterJobs}
-                  />
-                );
-              })}
-              <Settings
-                setButtonsVisible={setButtonsVisible}
-                setDarkTheme={setDarkTheme}
-                buttonsVisible={buttonsVisible}
-              />
-            </ul>
-            <JobSearch
-              jobs={jobs}
-              setCreateNewEntry={setCreateNewEntry}
-              setButtonsVisible={setButtonsVisible}
-              setCardVisible={setCardVisible}
-            />
+        <div className="flex flex-col h-screen">
+          <nav className="bg-green-400 dark:bg-neutral-800 dark:text-green-400 h-10 flex w-full whitespace-nowrap">
+            <button className="p-2 hover:bg-neutral-500 tracking-widest">
+              add new entry
+            </button>
+            <button className="p-2 hover:bg-neutral-500 tracking-widest">
+              add resume
+            </button>
+            <DesktopJobSearch jobs={jobs} />
+            <button className="p-2 hover:bg-neutral-500 tracking-widest">
+              theme
+            </button>
+            <button className="p-2 hover:bg-neutral-500 tracking-widest">
+              sign out
+            </button>
           </nav>
-          <div className="flex flex-col-reverse h-full bg-blue-300 dark:bg-neutral-700 p-4 gap-y-4 overflow-x-auto max-w-screen">
-            {jobs.length > 0 && !filter
-              ? jobs
-                  .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-                  .map((job) => (
-                    <JobCard
-                      key={job.id || job.createdAt}
-                      company={job.company}
-                      position={job.position}
-                      createdAt={job.createdAt}
-                      job={job}
-                      setCreateNewEntry={setCreateNewEntry}
-                      setButtonsVisible={setButtonsVisible}
-                      setCardVisible={setCardVisible}
-                    />
-                  ))
-              : null}
-            {filter && filter !== 'resumes'
-              ? sortedJobs[filter.toLowerCase()]
-                  .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-                  .map((job) => (
-                    <JobCard
-                      key={job.id || job.createdAt}
-                      company={job.company}
-                      position={job.position}
-                      createdAt={job.createdAt}
-                      job={job}
-                      setCreateNewEntry={setCreateNewEntry}
-                      setButtonsVisible={setButtonsVisible}
-                      setCardVisible={setCardVisible}
-                    />
-                  ))
-              : null}
-            {filter && filter === 'resumes' && resumeList
-              ? resumeList
-                  .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-                  .map((resume) => (
-                    <ResumeCard
-                      key={resume.name}
-                      resume={resume}
-                      getResumeList={getResumeList}
-                    />
-                  ))
-              : null}
+          <div className="flex h-full bg-blue-300 dark:bg-neutral-700 pb-0 gap-x-4 overflow-x-scroll max-w-screen pt-4 hide-scroll">
+            <div className="h-full min-w-[300px] overflow-y-auto hide-scroll gap-3 flex flex-col px-4 pb-4">
+              <h1 className="sticky top-0 dark:bg-green-500 text-center p-1 font-bold tracking-widest">
+                resumes
+              </h1>
+              {resumeList
+                .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                .map((resume) => (
+                  <ResumeCard
+                    key={resume.name}
+                    resume={resume}
+                    getResumeList={getResumeList}
+                  />
+                ))}
+            </div>
+            {statusList.map((status) => (
+              <div
+                key={status.toLowerCase()}
+                className="h-full min-w-[300px] overflow-y-auto hide-scroll gap-3 flex flex-col px-4 pb-4"
+              >
+                <h1 className="sticky top-0 dark:bg-green-500 text-center p-1 font-bold tracking-widest">
+                  {status.toLowerCase()}
+                </h1>
+                {sortedJobs
+                  ? sortedJobs[status.toLowerCase()]
+                      .sort(
+                        (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+                      )
+                      .map((job) => (
+                        <JobCard
+                          key={job.id || job.createdAt}
+                          company={job.company}
+                          position={job.position}
+                          createdAt={job.createdAt}
+                          job={job}
+                          setCreateNewEntry={setCreateNewEntry}
+                          setButtonsVisible={setButtonsVisible}
+                          setCardVisible={setCardVisible}
+                        />
+                      ))
+                  : null}
+              </div>
+            ))}
           </div>
         </div>
         {createNewEntry ? (
@@ -255,13 +371,6 @@ export default function Home() {
             updateJobs={updateJobs}
             updateEntryInfo={updateEntryInfo}
             statusList={statusList}
-          />
-        ) : null}
-        {buttonsVisible ? (
-          <ToggleNewButtons
-            setCreateNewEntry={setCreateNewEntry}
-            setButtonsVisible={setButtonsVisible}
-            getResumeList={getResumeList}
           />
         ) : null}
       </main>

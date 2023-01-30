@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import Timestamp from './timestamp';
 
 export default function JobCard({
@@ -9,6 +10,17 @@ export default function JobCard({
   setButtonsVisible,
   setCardVisible,
 }) {
+  const [mobile, setMobile] = useState(false);
+
+  function screenWidth(event) {
+    setMobile(event.target.innerWidth <= 768);
+  }
+
+  useEffect(() => {
+    setMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', screenWidth);
+  }, []);
+
   return (
     <div
       onClick={() => {
@@ -16,7 +28,9 @@ export default function JobCard({
         setButtonsVisible(false);
         setCardVisible(job);
       }}
-      className="rounded-xl p-2 bg-white dark:bg-slate-800 h-fit w-screen-p4"
+      className={`rounded-xl p-2 bg-white dark:bg-slate-800 h-fit ${
+        mobile ? 'w-screen-p4' : ''
+      }`}
     >
       <h1
         className={`font-bold truncate dark:text-lime-300 ${
