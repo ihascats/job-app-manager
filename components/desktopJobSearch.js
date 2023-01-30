@@ -1,8 +1,12 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import Icons from './icons';
-export default function DesktopJobSearch({ jobs }) {
+export default function DesktopJobSearch({
+  desktopJobsFilter,
+  setDesktopJobsFilter,
+  statusList,
+  sortedJobs,
+}) {
   const icons = Icons();
-  const [searchList, setSearchList] = useState([]);
   const searchInput = useRef();
 
   return (
@@ -11,24 +15,31 @@ export default function DesktopJobSearch({ jobs }) {
         ref={searchInput}
         onChange={(event) => {
           const text = event.target.value.toLowerCase().trim();
+          const newSort = {};
+          if (text.length < 3) {
+            setDesktopJobsFilter(sortedJobs);
+          }
           if (text.length > 2) {
-            const search = jobs.filter((value) =>
-              value.company.toLowerCase().trim().includes(text),
-            );
-            setSearchList(
-              search.sort((a, b) => a.company.length - b.company.length),
-            );
+            statusList.forEach((status) => {
+              newSort[status.toLowerCase()] = desktopJobsFilter[
+                status.toLowerCase()
+              ].filter((value) =>
+                value.company.toLowerCase().trim().includes(text),
+              );
+            });
+
+            setDesktopJobsFilter(newSort);
           }
         }}
-        className="w-full bg-transparent px-2 py-1 dark:placeholder-green-300/60 text-black dark:text-green-300"
+        className="w-full bg-transparent px-2 py-1 placeholder-black/60 dark:placeholder-green-300/60 text-black dark:text-green-300"
         placeholder="Search.."
       ></input>
       <button
         onClick={() => {
-          setSearchList([]);
+          setDesktopJobsFilter(sortedJobs);
           searchInput.current.value = '';
         }}
-        className="px-1 fill-white dark:fill-black"
+        className="px-1 dark:fill-green-500 fill-black"
       >
         {icons.cancelSearch}
       </button>

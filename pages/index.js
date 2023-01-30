@@ -1,4 +1,4 @@
-import DesktopJobSearch from '@/components/desktopJobSearch';
+import DesktopNav from '@/components/desktopNav';
 import JobCard from '@/components/jobCard';
 import JobSearch from '@/components/jobSearch';
 import NavItems from '@/components/navItems';
@@ -27,6 +27,7 @@ export default function Home() {
   const [cardVisible, setCardVisible] = useState();
   const [filter, setFilter] = useState();
   const [sortedJobs, setSortedJobs] = useState();
+  const [desktopJobsFilter, setDesktopJobsFilter] = useState();
   const [darkTheme, setDarkTheme] = useState(false);
   const { data: session } = useSession();
 
@@ -130,6 +131,7 @@ export default function Home() {
     if (jobs.length > 0) {
       const filterSortedJobs = sortJobs(statusList);
       setSortedJobs(filterSortedJobs);
+      setDesktopJobsFilter(filterSortedJobs);
     }
   }, [jobs]);
 
@@ -302,24 +304,19 @@ export default function Home() {
         }
       >
         <div className="flex flex-col h-screen">
-          <nav className="bg-green-400 dark:bg-neutral-800 dark:text-green-400 h-10 flex w-full whitespace-nowrap">
-            <button className="p-2 hover:bg-neutral-500 tracking-widest">
-              add new entry
-            </button>
-            <button className="p-2 hover:bg-neutral-500 tracking-widest">
-              add resume
-            </button>
-            <DesktopJobSearch jobs={jobs} />
-            <button className="p-2 hover:bg-neutral-500 tracking-widest">
-              theme
-            </button>
-            <button className="p-2 hover:bg-neutral-500 tracking-widest">
-              sign out
-            </button>
-          </nav>
+          <DesktopNav
+            jobs={jobs}
+            setCreateNewEntry={setCreateNewEntry}
+            getResumeList={getResumeList}
+            setDarkTheme={setDarkTheme}
+            desktopJobsFilter={desktopJobsFilter}
+            setDesktopJobsFilter={setDesktopJobsFilter}
+            statusList={statusList}
+            sortedJobs={sortedJobs}
+          />
           <div className="flex h-full bg-blue-300 dark:bg-neutral-700 pb-0 gap-x-4 overflow-x-scroll max-w-screen pt-4 hide-scroll">
             <div className="h-full min-w-[300px] overflow-y-auto hide-scroll gap-3 flex flex-col px-4 pb-4">
-              <h1 className="sticky top-0 dark:bg-green-500 text-center p-1 font-bold tracking-widest">
+              <h1 className="sticky top-0 bg-green-500 text-center p-1 font-bold tracking-widest">
                 resumes
               </h1>
               {resumeList
@@ -337,11 +334,11 @@ export default function Home() {
                 key={status.toLowerCase()}
                 className="h-full min-w-[300px] overflow-y-auto hide-scroll gap-3 flex flex-col px-4 pb-4"
               >
-                <h1 className="sticky top-0 dark:bg-green-500 text-center p-1 font-bold tracking-widest">
+                <h1 className="sticky top-0 bg-green-500 text-center p-1 font-bold tracking-widest">
                   {status.toLowerCase()}
                 </h1>
-                {sortedJobs
-                  ? sortedJobs[status.toLowerCase()]
+                {desktopJobsFilter
+                  ? desktopJobsFilter[status.toLowerCase()]
                       .sort(
                         (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
                       )
