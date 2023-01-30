@@ -92,6 +92,18 @@ export default function Icons() {
       />
     </svg>
   );
+  const swap = (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="w-6 h-6 fill-inherit"
+      viewBox="0 0 24 24"
+    >
+      <path
+        fill="inherit"
+        d="M21,9L17,5V8H10V10H17V13M7,11L3,15L7,19V16H14V14H7V11Z"
+      />
+    </svg>
+  );
 
   return {
     loading,
@@ -103,5 +115,6 @@ export default function Icons() {
     settings,
     theme,
     cancelSearch,
+    swap,
   };
 }

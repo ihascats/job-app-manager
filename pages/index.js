@@ -316,7 +316,7 @@ export default function Home() {
           />
           <div className="flex h-full bg-blue-300 dark:bg-neutral-700 pb-0 gap-x-4 overflow-x-scroll max-w-screen pt-4 hide-scroll">
             <div className="h-full min-w-[300px] overflow-y-auto hide-scroll gap-3 flex flex-col px-4 pb-4">
-              <h1 className="sticky top-0 bg-green-500 text-center p-1 font-bold tracking-widest">
+              <h1 className="sticky top-0 bg-green-500 text-center p-1 font-bold tracking-widest z-50">
                 resumes
               </h1>
               {resumeList
@@ -334,7 +334,7 @@ export default function Home() {
                 key={status.toLowerCase()}
                 className="h-full min-w-[300px] overflow-y-auto hide-scroll gap-3 flex flex-col px-4 pb-4"
               >
-                <h1 className="sticky top-0 bg-green-500 text-center p-1 font-bold tracking-widest">
+                <h1 className="sticky top-0 bg-green-500 text-center p-1 font-bold tracking-widest z-50">
                   {status.toLowerCase()}
                 </h1>
                 {desktopJobsFilter
