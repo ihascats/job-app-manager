@@ -1,4 +1,5 @@
 import DesktopNav from '@/components/desktopNav';
+import Icons from '@/components/icons';
 import JobCard from '@/components/jobCard';
 import JobSearch from '@/components/jobSearch';
 import NavItems from '@/components/navItems';
@@ -20,7 +21,7 @@ export default function Home() {
     'Pending',
     'Offer',
   ];
-  const [jobs, setJobs] = useState([]);
+  const [jobs, setJobs] = useState();
   const [resumeList, setResumeList] = useState([]);
   const [createNewEntry, setCreateNewEntry] = useState(false);
   const [buttonsVisible, setButtonsVisible] = useState(true);
@@ -29,6 +30,7 @@ export default function Home() {
   const [sortedJobs, setSortedJobs] = useState();
   const [desktopJobsFilter, setDesktopJobsFilter] = useState();
   const [darkTheme, setDarkTheme] = useState(false);
+  const [loading, setLoading] = useState(true);
   const { data: session } = useSession();
 
   function filterJobs(event) {
@@ -128,12 +130,15 @@ export default function Home() {
       return obj;
     }
 
-    if (jobs.length > 0) {
+    if (jobs) {
       const filterSortedJobs = sortJobs(statusList);
       setSortedJobs(filterSortedJobs);
       setDesktopJobsFilter(filterSortedJobs);
+      setLoading(false);
     }
   }, [jobs]);
+
+  const icons = Icons();
 
   if (!session) {
     return (
@@ -146,6 +151,24 @@ export default function Home() {
         </Head>
         <main>
           <SignInButtons />
+        </main>
+      </>
+    );
+  }
+  if (loading) {
+    return (
+      <>
+        <Head>
+          <title>Job Application Manager</title>
+          <meta name="description" content="Job Application Manager" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+        <main>
+          <div className="bg-gradient-to-br from-neutral-800 to-red-600 flex flex-col items-center justify-center gap-4 z-50 w-screen h-screen fill-white text-white">
+            {icons.loading}
+            <p className="font-mono">Loading information..</p>
+          </div>
         </main>
       </>
     );
