@@ -65,7 +65,7 @@ export default async function handler(req, res) {
       cover,
     }) {
       connection.query(
-        `UPDATE job_listing SET status = '${status}', company = '${company}', position = '${position}', link = '${link}', location = '${location}', salary = '${salary}', notes = '${notes}', resume = '${resume}', cover = '${cover}' WHERE id = ${id}`,
+        `UPDATE job_listing SET status = '${status.trim()}', company = '${company.trim()}', position = '${position.trim()}', link = '${link.trim()}', location = '${location.trim()}', salary = '${salary.trim()}', notes = '${notes.trim()}', resume = '${resume.trim()}', cover = '${cover.trim()}' WHERE id = ${id}`,
         (err, rows) => {
           // ... use the result ...
           res.send({ rows });

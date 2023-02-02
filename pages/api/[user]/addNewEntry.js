@@ -77,7 +77,7 @@ export default async function handler(req, res) {
       .slice(0, 19)
       .replace('T', ' ')}`;
     connection.query(
-      `INSERT INTO job_listing (createdAt, status, company, position, link, location, salary, notes, resume, cover, user) VALUES ('${createdAt}', '${status}' ,'${company}', '${position}', '${link}', '${location}', '${salary}', '${notes}', '${resume}', '${cover}', '${user}')`,
+      `INSERT INTO job_listing (createdAt, status, company, position, link, location, salary, notes, resume, cover, user) VALUES ('${createdAt}', '${status.trim()}' ,'${company.trim()}', '${position.trim()}', '${link.trim()}', '${location.trim()}', '${salary.trim()}', '${notes.trim()}', '${resume.trim()}', '${cover.trim()}', '${user}')`,
       (err, rows) => {
         console.log(rows);
         res.send({ insertedId: rows.insertId, createdAt });
