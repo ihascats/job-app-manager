@@ -60,9 +60,9 @@ export default function NewEntry({
 
     formData.forEach((value, key) => {
       if (typeof value === 'object') {
-        if ('name' in value) obj[key] = value.name;
+        if ('name' in value) obj[key] = value.name.trim();
       } else {
-        obj[key] = value;
+        obj[key] = value.trim();
       }
     });
     updateEntryInfo(id, obj);
@@ -85,9 +85,9 @@ export default function NewEntry({
 
     formData.forEach((value, key) => {
       if (typeof value === 'object') {
-        if ('name' in value) obj[key] = value.name;
+        if ('name' in value) obj[key] = value.name.trim();
       } else {
-        obj[key] = value;
+        obj[key] = value.trim();
       }
     });
 
