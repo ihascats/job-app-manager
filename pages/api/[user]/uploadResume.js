@@ -1,6 +1,7 @@
 const fs = require('fs');
 
 import formidable from 'formidable';
+import path from 'path';
 
 export const config = {
   api: {
@@ -17,18 +18,23 @@ export default async function handler(req, res) {
 
   const form = new formidable.IncomingForm();
   form.options.keepExtensions = true;
-  const dir = `./uploads/${user}`;
+  // https://github.com/vercel/next.js/discussions/34295#discussioncomment-2170657
+  const dir = path.resolve(process.cwd(), 'uploads', user);
 
   form.parse(req);
   form.on('file', function (field, file) {
-    form.uploadDir = dir + '/' + field;
-    const newFilePath = form.uploadDir + '/' + file.originalFilename;
+    form.uploadDir = path.resolve(process.cwd(), dir, field);
+    const newFilePath = path.resolve(
+      process.cwd(),
+      form.uploadDir,
+      file.originalFilename,
+    );
     if (fs.existsSync(newFilePath)) {
       res.status(401).send({ error: 'file with that name already exists' });
       return;
     }
-    if (!fs.existsSync(dir + '/' + field)) {
-      fs.mkdirSync(dir + '/' + field, { recursive: true });
+    if (!fs.existsSync(form.uploadDir)) {
+      fs.mkdirSync(form.uploadDir, { recursive: true });
     }
 
     fs.rename(file.filepath, newFilePath, function (err) {

@@ -3,7 +3,8 @@ const path = require('path');
 
 export default async function handler(req, res) {
   const { user } = req.query;
-  const directoryPath = `./uploads/${user}/resume`;
+  // https://github.com/vercel/next.js/discussions/34295#discussioncomment-2170657
+  const directoryPath = path.resolve(process.cwd(), 'uploads', user, 'resume');
   if (!fs.existsSync(directoryPath)) {
     fs.mkdirSync(directoryPath, { recursive: true });
   }
