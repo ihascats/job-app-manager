@@ -1,8 +1,6 @@
 const mysql = require('mysql2');
-const fs = require('fs');
 
 import formidable from 'formidable';
-import path from 'path';
 
 export const config = {
   api: {
@@ -11,7 +9,7 @@ export const config = {
 };
 
 export default async function handler(req, res) {
-  const { user, id } = req.query;
+  const { id } = req.query;
   const connection = mysql.createConnection(process.env.DATABASE_URL);
 
   if (req.method === 'GET') {
@@ -39,25 +37,6 @@ export default async function handler(req, res) {
   if (req.method === 'PUT') {
     const form = new formidable.IncomingForm();
     form.options.keepExtensions = true;
-    // https://github.com/vercel/next.js/discussions/34295#discussioncomment-2170657
-    const dir = path.resolve(process.cwd(), 'uploads', user);
-
-    form.on('file', function (field, file) {
-      form.uploadDir = path.resolve(process.cwd(), dir, field);
-      const newFilePath = path.resolve(
-        process.cwd(),
-        form.uploadDir,
-        file.originalFilename,
-      );
-
-      if (!fs.existsSync(form.uploadDir)) {
-        fs.mkdirSync(form.uploadDir, { recursive: true });
-      }
-
-      fs.rename(file.filepath, newFilePath, function (err) {
-        if (err) console.log('ERROR: ' + err);
-      });
-    });
 
     async function updateData({
       status,

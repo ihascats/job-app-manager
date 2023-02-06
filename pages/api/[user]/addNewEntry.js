@@ -1,8 +1,6 @@
 const mysql = require('mysql2');
-const fs = require('fs');
 
 import formidable from 'formidable';
-import path from 'path';
 
 export const config = {
   api: {
@@ -21,26 +19,6 @@ export default async function handler(req, res) {
 
   const form = new formidable.IncomingForm();
   form.options.keepExtensions = true;
-
-  // https://github.com/vercel/next.js/discussions/34295#discussioncomment-2170657
-  const dir = path.resolve(process.cwd(), 'uploads', user);
-
-  form.on('file', function (field, file) {
-    form.uploadDir = path.resolve(process.cwd(), dir, field);
-    const newFilePath = path.resolve(
-      process.cwd(),
-      form.uploadDir,
-      file.originalFilename,
-    );
-
-    if (!fs.existsSync(form.uploadDir)) {
-      fs.mkdirSync(form.uploadDir, { recursive: true });
-    }
-
-    fs.rename(file.filepath, newFilePath, function (err) {
-      if (err) console.log('ERROR: ' + err);
-    });
-  });
 
   // https://stackoverflow.com/a/17415677/19683372
   function toIsoString(date) {
@@ -86,7 +64,6 @@ export default async function handler(req, res) {
     connection.query(
       `INSERT INTO job_listing (createdAt, status, company, position, link, location, salary, notes, resume, cover, user) VALUES ('${createdAt}', '${status.trim()}' ,'${company.trim()}', '${position.trim()}', '${link.trim()}', '${location.trim()}', '${salary.trim()}', '${notes.trim()}', '${resume.trim()}', '${cover.trim()}', '${user}')`,
       (err, rows) => {
-        console.log(rows);
         res.send({ insertedId: rows.insertId, createdAt });
         connection.end();
       },

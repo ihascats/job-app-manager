@@ -1,5 +1,5 @@
 import { useSession } from 'next-auth/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import DeleteConfirmation from './deleteConfirmation';
 import Icons from './icons';
 
@@ -11,11 +11,9 @@ export default function NewEntry({
   updateJobs,
   updateEntryInfo,
   statusList,
+  resumeList,
 }) {
   const [coverLetterFileName, setCoverLetterFileName] = useState();
-  const [resumeFileName, setResumeFileName] = useState();
-  const [resumeList, setResumeList] = useState([]);
-  const [resumeSelectSwitch, setResumeSelectSwitch] = useState(true);
   const [jobData, setJobData] = useState();
   const [saving, setSaving] = useState(false);
   const { data: session } = useSession();
@@ -23,23 +21,21 @@ export default function NewEntry({
   function elementStopPropagation(event) {
     event.stopPropagation();
   }
-
-  async function getResumes() {
-    const link = `/api/${session.user.email}/getResumes`;
-    const response = await fetch(link, {
-      method: 'GET',
+  async function deleteCoverFile(name) {
+    const link = `/api/${session.user.email}/cover/${name}`;
+    await fetch(link, {
+      method: 'DELETE',
     });
-    const json = await response.json();
-    return json.resumes;
   }
 
   async function deleteEntry({ id }) {
     updateJobs(id);
     cancel();
-    const link = `/api/${session.user.email}/getEntry/${id}`;
+    const link = `/api/getEntry/${id}`;
     await fetch(link, {
       method: 'DELETE',
     });
+    deleteCoverFile(jobData.cover);
   }
 
   function cancel(event) {
@@ -65,10 +61,14 @@ export default function NewEntry({
         obj[key] = value.trim();
       }
     });
+    if (obj.cover !== jobData.cover && jobData.cover !== '') {
+      deleteCoverFile(jobData.cover);
+      uploadCoverFile();
+    }
     updateEntryInfo(id, obj);
     cancel();
 
-    const link = `/api/${session.user.email}/getEntry/${id}`;
+    const link = `/api/getEntry/${id}`;
     await fetch(link, {
       method: 'PUT',
       body: formData,
@@ -90,6 +90,9 @@ export default function NewEntry({
         obj[key] = value.trim();
       }
     });
+    if (obj.cover !== '') {
+      uploadCoverFile();
+    }
 
     const link = `/api/${session.user.email}/addNewEntry`;
     await fetch(link, {
@@ -109,21 +112,6 @@ export default function NewEntry({
   useEffect(() => {
     if (session && cardVisible) {
       setJobData(cardVisible);
-    }
-    if (jobData) {
-      if (jobData.resume === '') {
-        setResumeSelectSwitch(false);
-      }
-      getResumes().then((result) => {
-        if (
-          !result.some((resume) => resume.name === jobData.resume) &&
-          jobData.resume !== ''
-        ) {
-          // if resume under a listed name doesn't exist add an object with said name
-          result.push({ name: jobData.resume });
-        }
-        setResumeList(result);
-      });
     }
   }, [cardVisible, session, jobData]);
 
@@ -148,6 +136,40 @@ export default function NewEntry({
   function terminate() {
     setDeleteConfirmationVisible(false);
   }
+
+  async function getFile(name) {
+    const link = `/api/${session.user.email}/cover/${name}`;
+    const response = await fetch(link);
+    const blob = await response.blob();
+    const fileURL = URL.createObjectURL(blob);
+    return fileURL;
+  }
+
+  const [downloadLink, setDownloadLink] = useState();
+  useEffect(() => {
+    if (session && jobData) {
+      if (jobData.cover !== '') {
+        getFile(jobData.cover).then((result) => {
+          setDownloadLink(result);
+        });
+      }
+    }
+  }, [jobData, session]);
+
+  async function uploadCoverFile() {
+    const file = coverFileInput.current.files?.[0];
+    const url = `/api/${session.user.email}/cover/${file.name}`;
+    const formData = new FormData();
+
+    formData.append('file', file, file.name);
+
+    await fetch(url, {
+      method: 'POST',
+      body: formData,
+    });
+  }
+
+  const coverFileInput = useRef();
 
   const icons = Icons();
 
@@ -236,62 +258,56 @@ export default function NewEntry({
               : null}
           </select>
           <div className="w-full flex">
-            {resumeSelectSwitch && resumeList.length > 0 ? (
-              <select
-                name="resume"
-                className="p-2 bg-gray-200 dark:bg-slate-600 font-mono text-sm truncate w-screen-resume-select"
-                defaultValue={jobData ? jobData.resume : ''}
-              >
-                {resumeList.map((resume) => (
-                  <option className="dark:bg-slate-600" key={resume.name}>
-                    {resume.name}
-                  </option>
-                ))}
-              </select>
-            ) : (
-              <label className="py-2 px-4 bg-gray-200 dark:bg-slate-600 font-mono text-sm truncate w-screen-resume-select">
-                Resume
-                {resumeFileName ? `: ${resumeFileName}` : ': select a file'}
-                <input
-                  onChange={(event) => {
-                    setResumeFileName(
-                      event.target.value.split('\\').reverse()[0],
-                    );
-                  }}
-                  hidden
-                  name="resume"
-                  type="file"
-                ></input>
-              </label>
-            )}
-            <button
-              onClick={(event) => {
-                event.preventDefault();
-                setResumeSelectSwitch((prev) => !prev);
-              }}
-              className="p-2 bg-gray-400 dark:bg-slate-700 font-mono text-sm"
+            <select
+              name="resume"
+              className="p-2 bg-gray-200 dark:bg-slate-600 font-mono text-sm truncate w-full"
+              defaultValue={jobData ? jobData.resume : ''}
             >
-              {icons.swap}
-            </button>
+              {resumeList.map((resume) => (
+                <option className="dark:bg-slate-600" key={resume.name}>
+                  {resume.name}
+                </option>
+              ))}
+            </select>
           </div>
-          <label className="py-2 px-4 bg-gray-200 dark:bg-slate-600 font-mono text-sm truncate">
-            Cover Letter
-            {jobData
-              ? `: ${jobData.cover}`
-              : coverLetterFileName
-              ? `: ${coverLetterFileName}`
-              : ': select a file'}
-            <input
-              onChange={(event) => {
-                setCoverLetterFileName(
-                  event.target.value.split('\\').reverse()[0],
-                );
-              }}
-              hidden
-              name="cover"
-              type="file"
-            ></input>
-          </label>
+          <div className="w-full flex">
+            <label className="py-2 px-4 bg-gray-200 dark:bg-slate-600 font-mono text-sm truncate w-full">
+              Cover Letter
+              {jobData
+                ? `: ${jobData.cover}`
+                : coverLetterFileName
+                ? `: ${coverLetterFileName}`
+                : ': select a file'}
+              <input
+                onChange={(event) => {
+                  setCoverLetterFileName(
+                    event.target.value.split('\\').reverse()[0],
+                  );
+                }}
+                ref={coverFileInput}
+                hidden
+                name="cover"
+                type="file"
+              ></input>
+            </label>
+            {jobData ? (
+              jobData.cover !== '' ? (
+                <a
+                  download={jobData.cover}
+                  href={downloadLink}
+                  className="h-9 flex justify-center items-center py-2 px-4 bg-green-500 dark:bg-slate-900 fill-white dark:fill-green-600"
+                >
+                  {downloadLink ? (
+                    icons.download
+                  ) : (
+                    <div className="scale h-6 w-6 flex justify-center items-center">
+                      {icons.loading}
+                    </div>
+                  )}
+                </a>
+              ) : null
+            ) : null}
+          </div>
           <input
             className="border-b-2 dark:bg-slate-800 border-b-black/20 w-full font-bold text-xl placeholder-black/80 dark:placeholder-white/80"
             placeholder="Company"

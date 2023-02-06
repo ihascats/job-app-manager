@@ -1,26 +1,27 @@
-const fs = require('fs');
-const path = require('path');
+import { ListObjectsCommand, S3Client } from '@aws-sdk/client-s3';
 
 export default async function handler(req, res) {
   const { user } = req.query;
-  // https://github.com/vercel/next.js/discussions/34295#discussioncomment-2170657
-  const directoryPath = path.resolve(process.cwd(), 'uploads', user, 'resume');
-  if (!fs.existsSync(directoryPath)) {
-    fs.mkdirSync(directoryPath, { recursive: true });
-  }
 
-  const fileArray = fs.readdirSync(directoryPath, function (err) {
-    if (err) throw err;
+  const params = {
+    Bucket: process.env.S3_UPLOAD_BUCKET,
+    Delimiter: '/',
+    Prefix: `uploads/${user}/resume/`,
+  };
+  const s3Client = new S3Client({
+    region: process.env.S3_UPLOAD_REGION,
+    credentials: {
+      accessKeyId: process.env.S3_UPLOAD_KEY,
+      secretAccessKey: process.env.S3_UPLOAD_SECRET,
+    },
   });
+  const data = await s3Client.send(new ListObjectsCommand(params));
   const resumes = [];
-  fileArray.forEach((file) => {
-    const statArray = fs.statSync(
-      path.join(directoryPath, file),
-      function (err) {
-        if (err) throw err;
-      },
-    );
-    resumes.push({ name: file, createdAt: statArray.birthtime });
+  data.Contents.forEach((file) => {
+    resumes.push({
+      name: file.Key.split(params.Prefix)[1],
+      createdAt: file.LastModified,
+    });
   });
 
   res.send({ resumes });

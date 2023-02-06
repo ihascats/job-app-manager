@@ -1,7 +1,7 @@
 import { signOut, useSession } from 'next-auth/react';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import DesktopJobSearch from './desktopJobSearch';
-import { FileUploadFail, FileUploadSuccess } from './fileUpload';
+import { FileUploadFail, FileUploading, FileUploadSuccess } from './fileUpload';
 import Icons from './icons';
 
 export default function DesktopNav({
@@ -12,49 +12,64 @@ export default function DesktopNav({
   setDesktopJobsFilter,
   statusList,
   sortedJobs,
+  resumeList,
 }) {
   const { data: session } = useSession();
   const [uploadStatus, setUploadStatus] = useState([]);
   const [latestTimeout, setLatestTimeout] = useState([]);
+  const [fileUploading, setFileUploading] = useState([]);
 
-  async function addResume() {
-    const formData = new FormData(form.current);
-    const link = `/api/${session.user.email}/uploadResume`;
-    const response = await fetch(link, {
+  function sortTimeout() {
+    // clear timeout if it exists
+    if (latestTimeout) {
+      clearTimeout(latestTimeout);
+    }
+    // set new timeout thats going to clear out uploadStatus array
+    setLatestTimeout(
+      setTimeout(() => {
+        setUploadStatus([]);
+      }, 2000),
+    );
+  }
+
+  async function addResume(event) {
+    if (event.target.value === '') return;
+    const file = event.target.files?.[0];
+    const array = uploadStatus.map((status) => status);
+    if (resumeList.some((resume) => resume.name === file.name)) {
+      const errorMessage = 'file with this name already exists';
+      array.push(<FileUploadFail key={array.length} message={errorMessage} />);
+      sortTimeout();
+      setUploadStatus(array);
+      event.target.value = '';
+      return;
+    }
+    const uploading = <FileUploading key={0} />;
+    setFileUploading([uploading]);
+    const url = `/api/${session.user.email}/resume/${file.name}`;
+    const formData = new FormData();
+
+    formData.append('file', file, file.name);
+
+    await fetch(url, {
       method: 'POST',
       body: formData,
     });
-    const json = await response.json();
+    setFileUploading([]);
 
-    if (response.status) {
-      form.current.resume.value = '';
+    array.push(
+      <FileUploadSuccess
+        key={array.length}
+        message={'file successfully uploaded'}
+      />,
+    );
 
-      // clear timeout if it exists
-      if (latestTimeout) {
-        clearTimeout(latestTimeout);
-      }
-      // set new timeout thats going to clear out uploadStatus array
-      setLatestTimeout(
-        setTimeout(() => {
-          setUploadStatus([]);
-        }, 2000),
-      );
+    sortTimeout();
 
-      const array = structuredClone(uploadStatus);
-
-      if (response.status === 401)
-        array.push(<FileUploadFail key={array.length} message={json.error} />);
-      if (response.status === 200)
-        array.push(
-          <FileUploadSuccess key={array.length} message={json.success} />,
-        );
-
-      setUploadStatus(array);
-    }
-
+    setUploadStatus(array);
     getResumeList();
+    event.target.value = '';
   }
-  const form = useRef();
 
   const icons = Icons();
 
@@ -67,6 +82,7 @@ export default function DesktopNav({
 
   return (
     <nav className="bg-green-400 dark:bg-neutral-800 dark:text-green-400 dark:fill-green-400 h-10 flex w-full whitespace-nowrap">
+      {fileUploading}
       {uploadStatus}
       <button
         onClick={() => {
@@ -76,16 +92,12 @@ export default function DesktopNav({
       >
         add new entry
       </button>
-      <form
-        ref={form}
-        onChange={addResume}
-        className="p-2 hover:bg-neutral-500 tracking-widest cursor-pointer"
-      >
-        <label className="cursor-pointer">
+      <div className="pt-2 hover:bg-neutral-500 tracking-widest cursor-pointer">
+        <label className="cursor-pointer p-2">
           add resume
-          <input hidden name="resume" type="file"></input>
+          <input onChange={addResume} hidden name="resume" type="file"></input>
         </label>
-      </form>
+      </div>
       <DesktopJobSearch
         desktopJobsFilter={desktopJobsFilter}
         setDesktopJobsFilter={setDesktopJobsFilter}

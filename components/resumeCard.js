@@ -1,6 +1,7 @@
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import DeleteConfirmation from './deleteConfirmation';
+import { FileDeleting } from './fileUpload';
 import Icons from './icons';
 import Timestamp from './timestamp';
 
@@ -9,13 +10,18 @@ export default function ResumeCard({ resume, getResumeList }) {
   const { data: session } = useSession();
   const [deleteConfirmationVisible, setDeleteConfirmationVisible] =
     useState(false);
+  const [deletingInProgress, setDeletingInProgress] = useState([]);
 
   async function deleteFile(name) {
     const link = `/api/${session.user.email}/resume/${name}`;
+    terminate();
+    setDeletingInProgress(<FileDeleting />);
     await fetch(link, {
       method: 'DELETE',
     });
-    getResumeList();
+    getResumeList(() => {
+      setDeletingInProgress([]);
+    });
   }
 
   async function getFile(name) {
@@ -59,6 +65,7 @@ export default function ResumeCard({ resume, getResumeList }) {
         mobile ? 'w-screen-p4' : ''
       }`}
     >
+      {deletingInProgress}
       {deleteConfirmationVisible ? (
         <DeleteConfirmation proceed={proceed} terminate={terminate} />
       ) : null}
@@ -78,7 +85,13 @@ export default function ResumeCard({ resume, getResumeList }) {
           href={downloadLink}
           className="bg-green-500 rounded-br-lg py-1 fill-white dark:fill-green-500 dark:bg-zinc-700 flex justify-center"
         >
-          {icons.download}
+          {downloadLink ? (
+            icons.download
+          ) : (
+            <div className="scale h-6 w-6 flex justify-center items-center">
+              {icons.loading}
+            </div>
+          )}
         </a>
       </div>
     </div>

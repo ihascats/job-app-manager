@@ -300,6 +300,7 @@ export default function Home() {
               updateJobs={updateJobs}
               updateEntryInfo={updateEntryInfo}
               statusList={statusList}
+              resumeList={resumeList}
             />
           ) : null}
           {buttonsVisible ? (
@@ -307,6 +308,7 @@ export default function Home() {
               setCreateNewEntry={setCreateNewEntry}
               setButtonsVisible={setButtonsVisible}
               getResumeList={getResumeList}
+              resumeList={resumeList}
             />
           ) : null}
         </main>
@@ -336,6 +338,7 @@ export default function Home() {
             setDesktopJobsFilter={setDesktopJobsFilter}
             statusList={statusList}
             sortedJobs={sortedJobs}
+            resumeList={resumeList}
           />
           <div className="flex h-full bg-blue-300 dark:bg-neutral-700 pb-0 gap-x-4 overflow-x-scroll max-w-screen pt-4 hide-scroll">
             <div className="h-full min-w-[300px] overflow-y-auto hide-scroll gap-3 flex flex-col px-4 pb-4">
@@ -391,6 +394,7 @@ export default function Home() {
             updateJobs={updateJobs}
             updateEntryInfo={updateEntryInfo}
             statusList={statusList}
+            resumeList={resumeList}
           />
         ) : null}
       </main>

@@ -1,57 +1,76 @@
 import { useSession } from 'next-auth/react';
-import { useRef, useState } from 'react';
-import { FileUploadFail, FileUploadSuccess } from './fileUpload';
+import { useState } from 'react';
+import { FileUploadFail, FileUploading, FileUploadSuccess } from './fileUpload';
 
 export default function ToggleNewButtons({
   setCreateNewEntry,
   setButtonsVisible,
   getResumeList,
+  resumeList,
 }) {
   const { data: session } = useSession();
   const [uploadStatus, setUploadStatus] = useState([]);
   const [latestTimeout, setLatestTimeout] = useState([]);
+  const [fileUploading, setFileUploading] = useState([]);
 
-  async function addResume() {
-    const formData = new FormData(form.current);
-    const link = `/api/${session.user.email}/uploadResume`;
-    const response = await fetch(link, {
+  function sortTimeout() {
+    // clear timeout if it exists
+    if (latestTimeout) {
+      clearTimeout(latestTimeout);
+    }
+    // set new timeout thats going to clear out uploadStatus array
+    setLatestTimeout(
+      setTimeout(() => {
+        setUploadStatus([]);
+      }, 2000),
+    );
+  }
+
+  async function addResume(event) {
+    const file = event.target.files?.[0];
+    const array = uploadStatus.map((status) => status);
+    if (resumeList.some((resume) => resume.name === file.name)) {
+      array.push(
+        <FileUploadFail
+          key={array.length}
+          message={'file with this name already exists'}
+        />,
+      );
+      sortTimeout();
+      setUploadStatus(array);
+      event.target.value = '';
+      return;
+    }
+    const uploading = <FileUploading key={0} />;
+    setFileUploading([uploading]);
+    const url = `/api/${session.user.email}/resume/${file.name}`;
+    const formData = new FormData();
+
+    formData.append('file', file, file.name);
+
+    await fetch(url, {
       method: 'POST',
       body: formData,
     });
-    const json = await response.json();
+    setFileUploading([]);
 
-    if (response.status) {
-      form.current.resume.value = '';
+    array.push(
+      <FileUploadSuccess
+        key={array.length}
+        message={'file successfully uploaded'}
+      />,
+    );
 
-      // clear timeout if it exists
-      if (latestTimeout) {
-        clearTimeout(latestTimeout);
-      }
-      // set new timeout thats going to clear out uploadStatus array
-      setLatestTimeout(
-        setTimeout(() => {
-          setUploadStatus([]);
-        }, 2000),
-      );
+    sortTimeout();
 
-      const array = structuredClone(uploadStatus);
-
-      if (response.status === 401)
-        array.push(<FileUploadFail key={array.length} message={json.error} />);
-      if (response.status === 200)
-        array.push(
-          <FileUploadSuccess key={array.length} message={json.success} />,
-        );
-
-      setUploadStatus(array);
-    }
-
+    setUploadStatus(array);
     getResumeList();
+    event.target.value = '';
   }
-  const form = useRef();
 
   return (
     <div className="flex flex-col absolute bottom-[78px] right-0 items-end gap-2 p-2">
+      {fileUploading}
       {uploadStatus}
       <button
         onClick={() => {
@@ -62,12 +81,12 @@ export default function ToggleNewButtons({
       >
         +
       </button>
-      <form ref={form} onChange={addResume} className="h-[35px] pt-1">
+      <div>
         <label className="p-2 bg-emerald-400 dark:bg-neutral-900 text-sm rounded-md border-2 border-b-8 border-x-4 border-cyan-900 dark:border-emerald-500 text-cyan-900 dark:text-emerald-500 font-bold font-mono">
           Add Resume
-          <input hidden name="resume" type="file"></input>
+          <input onChange={addResume} hidden name="resume" type="file"></input>
         </label>
-      </form>
+      </div>
     </div>
   );
 }

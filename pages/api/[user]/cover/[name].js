@@ -26,7 +26,7 @@ export default async function handler(req, res) {
   if (req.method === 'GET') {
     const getCommand = new GetObjectCommand({
       Bucket: process.env.S3_UPLOAD_BUCKET,
-      Key: `uploads/${user}/resume/${name}`,
+      Key: `uploads/${user}/cover/${name}`,
     });
 
     const response = await s3Client.send(getCommand);
@@ -36,7 +36,7 @@ export default async function handler(req, res) {
   if (req.method === 'DELETE') {
     const params = {
       Bucket: process.env.S3_UPLOAD_BUCKET,
-      Key: `uploads/${user}/resume/${name}`,
+      Key: `uploads/${user}/cover/${name}`,
     };
     await s3Client.send(new DeleteObjectCommand(params));
     res.send({ status: 'success' });
@@ -49,7 +49,7 @@ export default async function handler(req, res) {
     form.on('file', async function (field, file) {
       const uploadCommand = new PutObjectCommand({
         Bucket: process.env.S3_UPLOAD_BUCKET,
-        Key: `uploads/${user}/resume/${name}`,
+        Key: `uploads/${user}/cover/${name}`,
         Body: createReadStream(file.filepath),
       });
 
