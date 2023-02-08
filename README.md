@@ -50,59 +50,60 @@ A web application built using <a href="https://nextjs.org/">Next.js</a>, MySQL (
 <ol>
 
   <li>
-  <p>Clone this repository to your local machine</p>
+    <p>Clone this repository to your local machine</p>
 
-```
-$ git clone https://github.com/ihascats/job-application-manager.git
-```
-
-  </li>
-
-  <li>
-  <p>Change into the project directory.</p>
-
-```
-$ cd job-application-manager
-```
+    ```
+    $ git clone https://github.com/ihascats/job-application-manager.git
+    ```
 
   </li>
 
   <li>
-  <p>Install the required dependencies.</p>
+    <p>Change into the project directory.</p>
 
-```shell
-$ npm install
-```
-
-  </li>
-
-  <li>
-  <p>Create a '.env' file in the root directory of the project and add the following environment variables:</p>
-
-```js
-DATABASE_URL = your_db_url;
-
-GITHUB_ID = // https://authjs.dev/reference/oauth-providers/github
-  GITHUB_SECRET =
-  GOOGLE_ID = // https://authjs.dev/reference/oauth-providers/google
-  GOOGLE_SECRET =
-  CALLBACK_URL =
-    'http://localhost:3000';
-NEXTAUTH_SECRET = // https://authjs.dev/reference/configuration/auth-config#secret
-  S3_UPLOAD_KEY = s3_key;
-S3_UPLOAD_SECRET = s3_secret;
-S3_UPLOAD_BUCKET = s3_bucket_name;
-S3_UPLOAD_REGION = s3_region;
-```
+    ```
+    $ cd job-application-manager
+    ```
 
   </li>
 
   <li>
-  <p>Start the development server.</p>
+    <p>Install the required dependencies.</p>
 
-```shell
-$ npm run dev
-```
+    ```shell
+    $ npm install
+    ```
+
+  </li>
+
+  <li>
+   <p>Create a '.env' file in the root directory of the project and add the following environment variables:</p>
+
+    ```js
+    DATABASE_URL = your_db_url;
+
+    GITHUB_ID = // https://authjs.dev/reference/oauth-providers/github
+    GITHUB_SECRET =
+
+    GOOGLE_ID = // https://authjs.dev/reference/oauth-providers/google
+    GOOGLE_SECRET =
+    CALLBACK_URL = 'http://localhost:3000';
+    NEXTAUTH_SECRET = // https://authjs.dev/reference/configuration/auth-config#secret
+
+    S3_UPLOAD_KEY = s3_key;
+    S3_UPLOAD_SECRET = s3_secret;
+    S3_UPLOAD_BUCKET = s3_bucket_name;
+    S3_UPLOAD_REGION = s3_region;
+    ```
+
+  </li>
+
+  <li>
+    <p>Start the development server.</p>
+
+    ```shell
+    $ npm run dev
+    ```
 
   </li>
 </ol>
