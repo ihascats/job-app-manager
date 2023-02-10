@@ -75,12 +75,38 @@ export default function NewEntry({
     });
   }
 
+  function toIsoString(date) {
+    const tzo = -date.getTimezoneOffset(),
+      dif = tzo >= 0 ? '+' : '-',
+      pad = function (num) {
+        return (num < 10 ? '0' : '') + num;
+      };
+
+    return (
+      date.getFullYear() +
+      '-' +
+      pad(date.getMonth() + 1) +
+      '-' +
+      pad(date.getDate()) +
+      'T' +
+      pad(date.getHours()) +
+      ':' +
+      pad(date.getMinutes()) +
+      ':' +
+      pad(date.getSeconds()) +
+      dif +
+      pad(Math.floor(Math.abs(tzo) / 60)) +
+      ':' +
+      pad(Math.abs(tzo) % 60)
+    );
+  }
+
   async function save(event) {
     event.preventDefault();
     setSaving(true);
     const formData = new FormData(event.target);
     const obj = {
-      createdAt: `${new Date().toISOString().slice(0, 19).replace('T', ' ')}`,
+      createdAt: `${toIsoString(new Date())}`,
     };
 
     formData.forEach((value, key) => {
@@ -101,7 +127,6 @@ export default function NewEntry({
     }).then((result) => {
       result.json().then((value) => {
         obj.id = value.insertedId;
-        obj.createdAt = value.createdAt;
         updateJobs(obj.id, obj);
         setSaving(false);
         cancel();
