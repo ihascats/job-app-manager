@@ -342,8 +342,11 @@ export default function Home() {
           />
           <div className="flex h-full bg-blue-300 dark:bg-neutral-700 pb-0 gap-x-4 overflow-x-scroll max-w-screen pt-4 hide-scroll">
             <div className="h-full min-w-[300px] overflow-y-auto hide-scroll gap-3 flex flex-col px-4 pb-4">
-              <h1 className="sticky top-0 bg-green-500 text-center p-1 font-bold tracking-widest z-50">
+              <h1 className="sticky top-0 bg-green-500 text-center p-1 font-bold tracking-widest z-50 flex justify-center gap-1">
                 resumes
+                <p className="text-sm">
+                  {resumeList ? resumeList.length : '0'}
+                </p>
               </h1>
               {resumeList
                 .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
@@ -360,8 +363,11 @@ export default function Home() {
                 key={status.toLowerCase()}
                 className="h-full min-w-[300px] overflow-y-auto hide-scroll gap-3 flex flex-col px-4 pb-4"
               >
-                <h1 className="sticky top-0 bg-green-500 text-center p-1 font-bold tracking-widest z-50">
+                <h1 className="sticky top-0 bg-green-500 text-center p-1 font-bold tracking-widest z-50 flex justify-center gap-1">
                   {status.toLowerCase()}
+                  <p className="text-sm">
+                    {sortedJobs ? sortedJobs[status.toLowerCase()].length : '0'}
+                  </p>
                 </h1>
                 {desktopJobsFilter
                   ? desktopJobsFilter[status.toLowerCase()]
