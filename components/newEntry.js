@@ -198,9 +198,31 @@ export default function NewEntry({
 
   const icons = Icons();
 
+  // prevent cancel when mouseUp is executed on cancelDiv
+  const [isMouseDown, setIsMouseDown] = useState(false);
+  const cancelDiv = useRef();
+
+  function handleMouseDown(event) {
+    elementStopPropagation(event);
+    setIsMouseDown(event.target);
+  }
+
+  function handleMouseUp(event) {
+    elementStopPropagation(event);
+    if (
+      isMouseDown === cancelDiv.current &&
+      event.target === cancelDiv.current
+    ) {
+      cancel();
+    }
+    setIsMouseDown(false);
+  }
+
   return (
     <div
-      onClick={cancel}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+      ref={cancelDiv}
       className={`bg-black/30 py-6 px-4 h-screen absolute top-0 w-full z-50 flex justify-center`}
     >
       {deleteConfirmationVisible ? (
