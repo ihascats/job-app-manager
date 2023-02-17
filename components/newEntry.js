@@ -367,12 +367,22 @@ export default function NewEntry({
             name="position"
             defaultValue={jobData ? jobData.position : ''}
           ></input>
-          <input
-            className="border-b-2 dark:bg-slate-800 border-b-black/20 w-full placeholder-blue-500"
-            placeholder="Link"
-            name="link"
-            defaultValue={jobData ? jobData.link : ''}
-          ></input>
+          <div className="flex gap-2">
+            <input
+              className="border-b-2 dark:bg-slate-800 border-b-black/20 w-full placeholder-blue-500"
+              placeholder="Link"
+              name="link"
+              defaultValue={jobData ? jobData.link : ''}
+            ></input>
+            <a
+              href={jobData ? jobData.link : ''}
+              target="_blank"
+              rel="noreferrer"
+              className=" flex self-center rounded fill-blue-500 dark:bg-slate-900 bg-neutral-300"
+            >
+              {icons.openInNew}
+            </a>
+          </div>
           <input
             className="border-b-2 dark:bg-slate-800 border-b-black/20 w-full placeholder-green-500"
             placeholder="Location"
