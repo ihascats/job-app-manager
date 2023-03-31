@@ -188,7 +188,7 @@ export default function Home() {
           }
         >
           <div className="flex flex-col-reverse h-screen">
-            <nav className="overflow-x-auto bg-green-400 dark:bg-neutral-800 dark:text-green-400 h-[88px] flex flex-col-reverse">
+            <nav className="z-50 overflow-x-auto bg-green-400 dark:bg-neutral-800 dark:text-green-400 min-h-[74px] flex flex-col-reverse">
               <ul className="flex h-fit">
                 <li
                   onClick={resumeList ? filterJobs : null}
@@ -239,7 +239,7 @@ export default function Home() {
                 setCardVisible={setCardVisible}
               />
             </nav>
-            <div className="flex flex-col-reverse h-full bg-blue-300 dark:bg-neutral-700 p-4 gap-y-4 overflow-x-auto max-w-screen items-center">
+            <div className="flex flex-col-reverse h-full bg-green-50 dark:bg-neutral-700 p-4 gap-y-4 overflow-x-auto max-w-screen items-center">
               {jobs.length > 0 && !filter
                 ? jobs
                     .sort(
@@ -340,7 +340,7 @@ export default function Home() {
             sortedJobs={sortedJobs}
             resumeList={resumeList}
           />
-          <div className="flex h-full bg-blue-300 dark:bg-neutral-700 pb-0 gap-x-4 overflow-x-scroll max-w-screen pt-4 hide-scroll">
+          <div className="flex h-full bg-green-50 dark:bg-neutral-700 pb-0 gap-x-4 overflow-x-scroll max-w-screen pt-4 hide-scroll">
             <div className="h-full min-w-[300px] overflow-y-auto hide-scroll gap-3 flex flex-col px-4 pb-4">
               <h1 className="sticky top-0 bg-green-500 text-center p-1 font-bold tracking-widest z-50 flex justify-center gap-1">
                 resumes

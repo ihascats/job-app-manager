@@ -69,7 +69,7 @@ export default function ToggleNewButtons({
   }
 
   return (
-    <div className="flex flex-col absolute bottom-[78px] right-0 items-end gap-2 p-2">
+    <div className="flex flex-col absolute bottom-[84px] right-0 items-end gap-2 p-2">
       {fileUploading}
       {uploadStatus}
       <button

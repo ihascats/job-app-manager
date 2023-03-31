@@ -28,7 +28,7 @@ export default function JobCard({
         setButtonsVisible(false);
         setCardVisible(job);
       }}
-      className={`rounded-xl p-2 bg-white dark:bg-slate-800 h-fit ${
+      className={`rounded-xl p-2 bg-green-300 dark:bg-slate-800 h-fit ${
         mobile ? 'w-screen-p4 max-w-[400px]' : ''
       }`}
     >
