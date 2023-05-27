@@ -165,7 +165,7 @@ export default function Home() {
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <main>
-          <div className="bg-gradient-to-br from-neutral-800 to-red-600 flex flex-col items-center justify-center gap-4 z-50 w-screen h-screen fill-white text-white">
+          <div className="bg-gradient-to-br from-neutral-800 to-indigo-600 flex flex-col items-center justify-center gap-4 z-50 w-screen h-screen fill-white text-white">
             {icons.loading}
             <p className="font-mono">Loading information..</p>
           </div>
