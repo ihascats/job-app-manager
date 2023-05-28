@@ -15,11 +15,19 @@
 }
 
 .btn-red {
-  @apply border-red-900 bg-red-300 text-red-900 fill-red-900;
+  @apply border-red-900 bg-red-300 text-red-900 fill-red-900 dark:border-red-500 dark:text-red-500;
 }
 
 .btn-green {
   @apply border-green-900 bg-green-300 text-green-900 fill-green-900;
+}
+
+.btn-lime {
+  @apply border-lime-900 bg-lime-300 text-lime-900 fill-lime-900 dark:border-lime-500 dark:text-lime-500;
+}
+
+.btn-yellow {
+  @apply border-yellow-900 bg-yellow-300 text-yellow-900 fill-yellow-900 dark:border-yellow-500 dark:text-yellow-500;
 }
 
 .container-btn {

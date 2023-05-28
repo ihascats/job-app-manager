@@ -235,7 +235,7 @@ export default function NewEntry({
       {saving ? (
         <div
           onClick={elementStopPropagation}
-          className={`rounded-xl bg-white dark:bg-slate-800 dark:text-neutral-200 w-screen-p4 h-screen-p4 backdrop-blur-md flex flex-col text-neutral-800 justify-center items-center fixed ${
+          className={`rounded-xl bg-white dark:bg-black/0 dark:text-neutral-200 w-screen-p4 h-screen-p4 backdrop-blur-md flex flex-col text-neutral-800 justify-center items-center fixed ${
             mobile ? 'w-screen-p4 max-w-[400px]' : 'max-w-[500px]'
           }`}
         >
@@ -245,7 +245,7 @@ export default function NewEntry({
       ) : cardVisible && !jobData ? (
         <div
           onClick={elementStopPropagation}
-          className={`rounded-xl bg-white dark:bg-slate-800 dark:text-neutral-200 w-screen-p4 h-screen-p4 backdrop-blur-md flex flex-col text-neutral-800 justify-center items-center fixed ${
+          className={`rounded-xl bg-white dark:bg-black/0 dark:text-neutral-200 w-screen-p4 h-screen-p4 backdrop-blur-md flex flex-col text-neutral-800 justify-center items-center fixed ${
             mobile ? 'w-screen-p4 max-w-[400px]' : 'max-w-[500px]'
           }`}
         >
@@ -256,7 +256,7 @@ export default function NewEntry({
         <form
           onClick={elementStopPropagation}
           onSubmit={save}
-          className={`bg-white dark:bg-slate-800 dark:text-neutral-200 rounded-xl h-full w-full py-4 px-2 flex  gap-4 z-50 ${
+          className={`container-btn dark:border-neutral-500 bg-white dark:bg-neutral-800 dark:text-neutral-200 rounded-xl h-full w-full py-4 px-2 flex  gap-4 z-50 ${
             mobile ? 'flex-col-reverse' : ' flex-col max-w-[500px]'
           } ${mobile ? 'w-screen-p4 max-w-[400px]' : ''}`}
         >
@@ -267,7 +267,7 @@ export default function NewEntry({
                   event.preventDefault();
                   setDeleteConfirmationVisible(true);
                 }}
-                className="py-2 px-4 bg-red-500 dark:bg-neutral-900 dark:text-red-500"
+                className="btn btn-red py-2 px-4 bg-red-500 dark:bg-neutral-900 dark:text-red-500"
               >
                 Delete
               </button>
@@ -277,48 +277,50 @@ export default function NewEntry({
                 onClick={(event) => {
                   updateEntry(event, cardVisible);
                 }}
-                className="py-2 px-4 bg-lime-500 dark:bg-neutral-800 dark:text-lime-500"
+                className="btn btn-lime py-2 px-4 bg-lime-500 dark:bg-neutral-800 dark:text-lime-500"
               >
                 Update
               </button>
             ) : (
-              <button className="py-2 px-4 bg-lime-500 dark:bg-neutral-800 dark:text-lime-500">
+              <button className="btn btn-lime py-2 px-4 bg-lime-500 dark:bg-neutral-800 dark:text-lime-500">
                 Save
               </button>
             )}
             <button
               onClick={cancel}
-              className="py-2 px-4 bg-yellow-500 dark:bg-neutral-700 dark:text-yellow-500"
+              className="btn btn-yellow py-2 px-4 bg-yellow-500 dark:bg-neutral-700 dark:text-yellow-500"
             >
               Cancel
             </button>
           </div>
           <select
             name="status"
-            className="p-2 bg-gray-200 dark:bg-slate-600"
+            className="p-2 bg-gray-200 dark:bg-black/30"
             defaultValue={jobData ? jobData.status : 'Applied'}
           >
             {statusList
               ? statusList.map((option) => (
-                  <option key={option}>{option}</option>
+                  <option className="dark:bg-neutral-800" key={option}>
+                    {option}
+                  </option>
                 ))
               : null}
           </select>
           <div className="w-full flex">
             <select
               name="resume"
-              className="p-2 bg-gray-200 dark:bg-slate-600 font-mono text-sm truncate w-full"
+              className="p-2 bg-gray-200 dark:bg-black/30 font-mono text-sm truncate w-full"
               defaultValue={jobData ? jobData.resume : ''}
             >
               {resumeList.map((resume) => (
-                <option className="dark:bg-slate-600" key={resume.name}>
+                <option className="dark:bg-neutral-800" key={resume.name}>
                   {resume.name}
                 </option>
               ))}
             </select>
           </div>
           <div className="w-full flex">
-            <label className="py-2 px-4 bg-gray-200 dark:bg-slate-600 font-mono text-sm truncate w-full">
+            <label className="py-2 px-4 bg-gray-200 dark:bg-black/0 font-mono text-sm truncate w-full dark:bg-black/30">
               Cover Letter
               {jobData
                 ? `: ${jobData.cover}`
@@ -356,20 +358,20 @@ export default function NewEntry({
             ) : null}
           </div>
           <input
-            className="border-b-2 dark:bg-slate-800 border-b-black/20 w-full font-bold text-xl placeholder-black/80 dark:placeholder-white/80"
+            className="border-b-2 dark:bg-black/0 border-b-black/20 w-full font-bold text-xl placeholder-black/80 dark:placeholder-white/80"
             placeholder="Company"
             name="company"
             defaultValue={jobData ? jobData.company : ''}
           ></input>
           <input
-            className="border-b-2 dark:bg-slate-800 border-b-black/20 w-full"
+            className="border-b-2 dark:bg-black/0 border-b-black/20 w-full"
             placeholder="Position"
             name="position"
             defaultValue={jobData ? jobData.position : ''}
           ></input>
           <div className="flex gap-2">
             <input
-              className="border-b-2 dark:bg-slate-800 border-b-black/20 w-full placeholder-blue-500"
+              className="border-b-2 dark:bg-black/0 border-b-black/20 w-full placeholder-blue-500"
               placeholder="Link"
               name="link"
               defaultValue={jobData ? jobData.link : ''}
@@ -384,19 +386,19 @@ export default function NewEntry({
             </a>
           </div>
           <input
-            className="border-b-2 dark:bg-slate-800 border-b-black/20 w-full placeholder-green-500"
+            className="border-b-2 dark:bg-black/0 border-b-black/20 w-full placeholder-green-500"
             placeholder="Location"
             name="location"
             defaultValue={jobData ? jobData.location : ''}
           ></input>
           <input
-            className="border-b-2 dark:bg-slate-800 border-b-black/20 w-full placeholder-yellow-500"
+            className="border-b-2 dark:bg-black/0 border-b-black/20 w-full placeholder-yellow-500"
             placeholder="Salary"
             name="salary"
             defaultValue={jobData ? jobData.salary : ''}
           ></input>
           <textarea
-            className="border-b-2 dark:bg-slate-800 border-b-black/20 w-full"
+            className="border-b-2 dark:bg-black/0 border-b-black/20 w-full"
             placeholder="Notes"
             name="notes"
             defaultValue={jobData ? jobData.notes : ''}

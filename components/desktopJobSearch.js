@@ -10,7 +10,7 @@ export default function DesktopJobSearch({
   const searchInput = useRef();
 
   return (
-    <div className="w-full flex dark:bg-neutral-700  bg-indigo-100 border-b-2 border-b-neutral-900 dark:border-b-indigo-500 z-50">
+    <div className="w-full flex dark:bg-neutral-800  bg-indigo-100 border-b-2 border-b-neutral-900 dark:border-b-indigo-500 z-50">
       <input
         ref={searchInput}
         onChange={(event) => {
