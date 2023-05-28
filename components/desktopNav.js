@@ -88,11 +88,11 @@ export default function DesktopNav({
         onClick={() => {
           setCreateNewEntry(true);
         }}
-        className="p-2 hover:bg-indigo-400 tracking-widest btn btn-neutral"
+        className="p-2 hover:bg-green-400 hover:dark:bg-green-900 tracking-widest btn btn-neutral dark:border-green-400 dark:text-green-400"
       >
         add new entry
       </button>
-      <div className="pt-2 hover:bg-indigo-400 tracking-widest cursor-pointer btn btn-neutral">
+      <div className="pt-2 hover:bg-orange-400 hover:dark:bg-orange-900 tracking-widest cursor-pointer btn btn-neutral dark:border-orange-400 dark:text-orange-400 dark:fill-orange-400">
         <label className="cursor-pointer p-2">
           add resume
           <input onChange={addResume} hidden name="resume" type="file"></input>
@@ -106,13 +106,13 @@ export default function DesktopNav({
       />
       <button
         onClick={changeTheme}
-        className="p-2 hover:bg-indigo-400 tracking-widest flex gap-2 btn btn-neutral"
+        className="p-2 hover:bg-yellow-400 hover:dark:bg-yellow-900 tracking-widest flex gap-2 btn btn-neutral dark:border-yellow-400 dark:text-yellow-400 dark:fill-yellow-400"
       >
         theme{icons.theme}
       </button>
       <button
         onClick={signOut}
-        className="p-2 hover:bg-indigo-400 tracking-widest flex gap-2 btn btn-neutral"
+        className="p-2 hover:bg-rose-400 hover:dark:bg-rose-900  tracking-widest flex gap-2 btn btn-neutral dark:border-rose-400 dark:text-rose-400 dark:fill-rose-400"
       >
         sign out{icons.signOut}
       </button>

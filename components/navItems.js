@@ -8,7 +8,7 @@ export default function NavItems({ status, sortedJobs, filterJobs }) {
       className={`px-4 py-2 ${
         sortedJobLength && sortedJobLength !== '0'
           ? 'hover:bg-white/30'
-          : 'bg-black/20 text-black/60 dark:text-green-400/60'
+          : 'bg-black/20 text-black/60 dark:text-indigo-400/60'
       } flex gap-1`}
       data-filter={status}
     >

@@ -6,7 +6,8 @@
 }
 
 .btn-neutral {
-  @apply border-neutral-900 bg-neutral-300 text-neutral-900 fill-neutral-900;
+  @apply border-neutral-900 bg-neutral-300 text-neutral-900 fill-neutral-900
+  dark:border-neutral-400 dark:bg-neutral-800 dark:text-neutral-400 dark:fill-neutral-400;
 }
 
 .btn-blue {

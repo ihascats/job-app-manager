@@ -18,7 +18,7 @@ export default function Timestamp({ createdAt }) {
       : `${days}d`;
 
   return (
-    <h3 className="text-sm font-bold opacity-60 font-mono whitespace-nowrap dark:text-lime-400">
+    <h3 className="text-sm font-bold opacity-60 font-mono whitespace-nowrap dark:text-neutral-400">
       - added {timeAmount} ago
     </h3>
   );

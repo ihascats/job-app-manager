@@ -13,9 +13,9 @@ export default function JobSearch({
   const searchInput = useRef();
 
   return (
-    <div className="sticky left-0 flex bg-neutral-700  dark:bg-green-500 border-b-2 border-b-neutral-900 dark:border-b-green-50 z-50">
+    <div className="sticky left-0 flex bg-neutral-700  dark:bg-indigo-500 border-b-2 border-b-neutral-900 dark:border-b-indigo-50 z-50">
       {searchList.length > 0 ? (
-        <div className="fixed bottom-[74px] left-0 bg dark:bg-green-900/80 bg-neutral-500/80 h-full p-4 pt-[90px] flex flex-col-reverse gap-y-4 overflow-x-auto max-w-screen">
+        <div className="fixed bottom-[74px] left-0 bg dark:bg-indigo-900/80 bg-neutral-500/80 h-full p-4 pt-[90px] flex flex-col-reverse gap-y-4 overflow-x-auto max-w-screen">
           {searchList
             .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
             .map((job) => (

@@ -60,7 +60,11 @@ export default function ResumeCard({ resume, getResumeList }) {
   }
 
   return (
-    <div className={`container-btn p-2 h-fit ${mobile ? 'w-screen-p4' : ''}`}>
+    <div
+      className={`container-btn dark:border-neutral-400 dark:text-neutral-300 p-2 h-fit ${
+        mobile ? 'w-screen-p4' : ''
+      }`}
+    >
       {deletingInProgress}
       {deleteConfirmationVisible ? (
         <DeleteConfirmation proceed={proceed} terminate={terminate} />
@@ -72,14 +76,14 @@ export default function ResumeCard({ resume, getResumeList }) {
           onClick={() => {
             setDeleteConfirmationVisible(true);
           }}
-          className="btn btn-red rounded-bl-lg py-1 dark:fill-red-500 dark:border-red-500 dark:bg-neutral-600 flex justify-center"
+          className="btn btn-red rounded-bl-lg py-1 dark:fill-red-500 dark:border-red-500 dark:bg-red-900 flex justify-center"
         >
           {icons.deleteFile}
         </button>
         <a
           download={resume.name}
           href={downloadLink}
-          className="btn btn-green rounded-br-lg py-1 dark:fill-green-500 dark:border-green-500 dark:bg-neutral-600 flex justify-center"
+          className="btn btn-green rounded-br-lg py-1 dark:fill-green-500 dark:border-green-500 dark:bg-green-900 flex justify-center"
         >
           {downloadLink ? (
             icons.download

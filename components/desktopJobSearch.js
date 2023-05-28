@@ -10,7 +10,7 @@ export default function DesktopJobSearch({
   const searchInput = useRef();
 
   return (
-    <div className="w-full flex dark:bg-neutral-700  bg-indigo-100 border-b-2 border-b-neutral-900 dark:border-b-green-500 z-50">
+    <div className="w-full flex dark:bg-neutral-700  bg-indigo-100 border-b-2 border-b-neutral-900 dark:border-b-indigo-500 z-50">
       <input
         ref={searchInput}
         onChange={(event) => {
@@ -31,7 +31,7 @@ export default function DesktopJobSearch({
             setDesktopJobsFilter(newSort);
           }
         }}
-        className="w-full bg-transparent px-2 py-1 placeholder-black/60 dark:placeholder-green-300/60 text-black dark:text-green-300 outline-none"
+        className="w-full bg-transparent px-2 py-1 placeholder-black/60 dark:placeholder-indigo-300/60 text-black dark:text-indigo-300 outline-none"
         placeholder="Search by Company.."
       ></input>
       <button
@@ -39,7 +39,7 @@ export default function DesktopJobSearch({
           setDesktopJobsFilter(sortedJobs);
           searchInput.current.value = '';
         }}
-        className="px-1 dark:fill-green-500 fill-black"
+        className="px-1 dark:fill-indigo-500 fill-black"
       >
         {icons.cancelSearch}
       </button>
