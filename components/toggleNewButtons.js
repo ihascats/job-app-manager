@@ -77,12 +77,12 @@ export default function ToggleNewButtons({
           setCreateNewEntry(true);
           setButtonsVisible(false);
         }}
-        className="w-9 bg-emerald-400 dark:bg-neutral-900 text-3xl rounded-md border-2 border-b-8 border-x-4 border-cyan-900 dark:border-emerald-500 text-cyan-900 dark:text-emerald-500"
+        className="w-9 text-3xl btn btn-neutral bg-indigo-300"
       >
         +
       </button>
       <div>
-        <label className="p-2 bg-emerald-400 dark:bg-neutral-900 text-sm rounded-md border-2 border-b-8 border-x-4 border-cyan-900 dark:border-emerald-500 text-cyan-900 dark:text-emerald-500 font-bold font-mono">
+        <label className="p-2 text-sm font-bold font-mono btn btn-neutral bg-indigo-300">
           Add Resume
           <input onChange={addResume} hidden name="resume" type="file"></input>
         </label>

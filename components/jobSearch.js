@@ -46,7 +46,7 @@ export default function JobSearch({
           }
         }}
         className="text-right w-full bg-transparent px-2 py-1 dark:placeholder-black dark:text-black text-white"
-        placeholder="Search.."
+        placeholder="Search by Company.."
       ></input>
       <button
         onClick={() => {

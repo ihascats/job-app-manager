@@ -81,18 +81,18 @@ export default function DesktopNav({
   }
 
   return (
-    <nav className="bg-green-200 dark:bg-neutral-800 dark:text-green-400 dark:fill-green-400 h-10 flex w-full whitespace-nowrap">
+    <nav className="bg-neutral-600 dark:bg-neutral-800 dark:text-neutral-400 dark:fill-neutral-400 h-fit flex w-full whitespace-nowrap">
       {fileUploading}
       {uploadStatus}
       <button
         onClick={() => {
           setCreateNewEntry(true);
         }}
-        className="p-2 hover:bg-neutral-500 tracking-widest"
+        className="p-2 hover:bg-indigo-400 tracking-widest btn btn-neutral"
       >
         add new entry
       </button>
-      <div className="pt-2 hover:bg-neutral-500 tracking-widest cursor-pointer">
+      <div className="pt-2 hover:bg-indigo-400 tracking-widest cursor-pointer btn btn-neutral">
         <label className="cursor-pointer p-2">
           add resume
           <input onChange={addResume} hidden name="resume" type="file"></input>
@@ -106,13 +106,13 @@ export default function DesktopNav({
       />
       <button
         onClick={changeTheme}
-        className="p-2 hover:bg-neutral-500 tracking-widest flex gap-2"
+        className="p-2 hover:bg-indigo-400 tracking-widest flex gap-2 btn btn-neutral"
       >
         theme{icons.theme}
       </button>
       <button
         onClick={signOut}
-        className="p-2 hover:bg-neutral-500 tracking-widest flex gap-2"
+        className="p-2 hover:bg-indigo-400 tracking-widest flex gap-2 btn btn-neutral"
       >
         sign out{icons.signOut}
       </button>
