@@ -17,6 +17,18 @@
   @apply border-red-900 bg-red-300 text-red-900 fill-red-900;
 }
 
+.btn-green {
+  @apply border-green-900 bg-green-300 text-green-900 fill-green-900;
+}
+
+.container-btn {
+  @apply border-4 rounded-xl border-neutral-900 bg-neutral-200 text-neutral-900 dark:border-neutral-200 dark:bg-neutral-800 dark:text-neutral-200;
+}
+
+.container-job-card {
+  @apply btn border-2 border-b-8 rounded-xl hover:bg-indigo-200 border-neutral-900 bg-neutral-200 text-neutral-900 dark:border-neutral-200 dark:bg-neutral-800 dark:text-neutral-200;
+}
+
 @tailwind utilities;
 
 @keyframes spin {
