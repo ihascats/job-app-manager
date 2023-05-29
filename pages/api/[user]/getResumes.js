@@ -17,7 +17,7 @@ export default async function handler(req, res) {
   });
   const data = await s3Client.send(new ListObjectsCommand(params));
   const resumes = [];
-  data.Contents.forEach((file) => {
+  data.Contents?.forEach((file) => {
     resumes.push({
       name: file.Key.split(params.Prefix)[1],
       createdAt: file.LastModified,
